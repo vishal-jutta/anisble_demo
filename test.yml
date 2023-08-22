@@ -12,8 +12,12 @@
       debug:
         msg: "Printing var {{output.stdout_lines}}"
 
-    - name: Synchronization of src on the inventory host to the dest on the localhost in pull mode
-      ansible.posix.synchronize:
-        mode: pull
-        src: /tmp/log1/
-        dest: /tmp/vish/logpulled
+ #   - name: Synchronization of src on the inventory host to the dest on the localhost in pull mode
+ #     ansible.posix.synchronize:
+  #      mode: pull
+ #       src: /tmp/log1/
+ #       dest: /tmp/vish/logpulled
+     - name: sync from src to dest
+       ansible.posix.synchronize:
+         src: /tmp/logtra/
+         dest: /tmp/logpulled/
