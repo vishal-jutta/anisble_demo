@@ -8,4 +8,4 @@
       register: output
     - name: Print variable
       debug:
-        msg: " Running playbook as user {{output.stdout}}"
+        msg: " Running playbook as user {{output}}"
