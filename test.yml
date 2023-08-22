@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  become: true
+  #become: true
   tasks:
     - name: check if we are able to ssh
       shell:
