@@ -19,5 +19,5 @@
  #       dest: /tmp/vish/logpulled
     - name: sync from src to dest
       ansible.posix.synchronize:
-        src: /tmp/logtra/f4
+        src: /tmp
         dest: /tmp/logpulled
