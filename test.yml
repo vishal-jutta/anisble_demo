@@ -25,5 +25,5 @@
       
     - name: sync from src to dest
       ansible.posix.synchronize:
-        src: /home/ansible/logs
+        src: /home
         dest: backup
