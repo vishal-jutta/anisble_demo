@@ -16,4 +16,4 @@
       ansible.posix.synchronize:
         mode: pull
         src: /tmp/log1/
-        dest: /home/ansible/logs
+        dest: /tmp/logpulled
