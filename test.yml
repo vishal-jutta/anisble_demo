@@ -17,7 +17,7 @@
   #      mode: pull
  #       src: /tmp/log1/
  #       dest: /tmp/vish/logpulled
-     - name: sync from src to dest
-       ansible.posix.synchronize:
-         src: /tmp/logtra/
-         dest: /tmp/logpulled/
+    - name: sync from src to dest
+      ansible.posix.synchronize:
+        src: /tmp/logtra/
+        dest: /tmp/logpulled/
