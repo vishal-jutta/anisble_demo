@@ -3,7 +3,7 @@
   become: true
   tasks:
     - name: check if we are able to ssh
-      ansible.builtin.shell: uptime
+      ansible.builtin.shell: /bin/bash uptime
     - name: Print variable
       debug:
         msg: " Running playbook as user"
