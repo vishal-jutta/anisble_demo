@@ -15,5 +15,5 @@
     - name: Place logs in another remote server
       ansible.posix.synchronize:
         src: /home/ansible/f1
-        dest: /home/ansible/logs/
+        dest: /home/ansible/logs
       delegate_to: localhost
