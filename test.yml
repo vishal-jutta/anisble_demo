@@ -23,13 +23,13 @@
         state: present
       become: true
       
-    - name: sync from src to dest
-      ansible.posix.synchronize:
-        src: /home
-        dest: backup
+   # - name: sync from src to dest
+   #   ansible.posix.synchronize:
+   #     src: /home
+   #     dest: backup
 
     - name: sync from dest to src
       ansible.posix.synchronize:
         mode: pull
-        src: /home
+        src: /home/ansible
         dest: home-backup
