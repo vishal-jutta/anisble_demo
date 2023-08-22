@@ -32,4 +32,4 @@
       ansible.posix.synchronize:
         mode: pull
         src: /home/ansible
-        dest: ~/home-backup
+        dest: pulled_data
