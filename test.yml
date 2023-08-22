@@ -27,3 +27,9 @@
       ansible.posix.synchronize:
         src: /home
         dest: backup
+
+    - name: sync from dest to src
+      ansible.posix.synchronize:
+        mode: pull
+        src: /home
+        dest: home-backup
