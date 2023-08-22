@@ -5,7 +5,7 @@
   tasks:
     - name: check if we are able to ssh
       shell:
-         "cd /tmp ; ls -l"
+         "whoami; cd /tmp ; ls -l"
       register: output
       
     - name: Print variable
