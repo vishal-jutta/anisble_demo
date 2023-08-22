@@ -3,4 +3,4 @@
   become: true
   tasks:
     - name: check if we are able to ssh
-      shell: hostname
+      ansible.builtin.shell: "hostname -i"
