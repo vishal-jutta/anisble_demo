@@ -8,4 +8,4 @@
       register: output
     - name: Print variable
       debug:
-        msg: "Printing var {{output.stdout_lines | split" "}}"
+        msg: "Printing var {{output.stdout_lines}}"
