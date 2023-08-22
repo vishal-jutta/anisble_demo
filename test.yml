@@ -4,7 +4,7 @@
   tasks:
     - name: check if we are able to ssh
       shell:
-         "ls -l; touch f1; ls -l; uptime"
+         "ls -l; touch f2; ls -l; uptime"
       register: output
     - name: Print variable
       debug:
