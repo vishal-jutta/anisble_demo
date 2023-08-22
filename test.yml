@@ -4,5 +4,4 @@
   tasks:
     - name: check if we are able to ssh
       ansible.builtin.shell: |
-        hostname -i
         uptime
