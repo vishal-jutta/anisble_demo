@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  become: true
+  become: false
   gather_facts: no
   tasks:
     - name: check if we are able to ssh
@@ -17,7 +17,13 @@
   #      mode: pull
  #       src: /tmp/log1/
  #       dest: /tmp/vish/logpulled
+    - name: check if rsync package is installed
+      ansible.builtin.package:
+        name: rsync
+        state: present
+      become: true
+      
     - name: sync from src to dest
       ansible.posix.synchronize:
-        src: /home/ansible
-        dest: /tmp/logpulled
+        src: ~/logs
+        dest: backup
