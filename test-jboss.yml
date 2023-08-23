@@ -15,6 +15,8 @@
       get_url:
         url: "https://developers.redhat.com/content-gateway/file/eap/8.4_Beta/jboss-eap-{{ jboss_eap_version }}.zip"
         dest: "/tmp/jboss-eap-{{ jboss_eap_version }}.zip"
+        url_username: 'vishal_jutta'
+        url_password: '@Jammu1993_2023@'
     - name: Install pre-reqs
       ansible.builtin.yum:
         name:
