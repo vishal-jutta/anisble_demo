@@ -25,7 +25,14 @@
       when:
         - tomcat_download_url is defined
   tasks:
-    - name: check if we are able to ssh
-      shell:
-         "whoami; cd /{{ tomcat_install_dir }} ; ls -l"
-      register: output
+    - name: check server is running
+      uri:
+        uri: "http://localhost:8080/"
+        status_code: 404
+        return_content: no
+    - name: Deploy sample Application
+      get_url:
+        url: 'https://people.redhat.com/~rpelisse/info-1.0.war'
+        dest: "{{ tomcat_home }}/webapps/info.war"
+      notify:
+        - Restart Tomcat service
