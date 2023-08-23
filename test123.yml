@@ -18,10 +18,10 @@
   tasks: 
     - name: Extract JBoss EAP
       ansible.builtin.unarchive:
-        src: "/tmp/eap-{{ jboss_eap_version }}.zip"
+        src: "/tmp/wildfly-{{ jboss_eap_version }}.zip"
         dest: "{{ jboss_eap_install_dir }}"
         remote_src: yes
-        creates: "{{ jboss_eap_install_dir }}/jboss-eap-{{ jboss_eap_version }}"
+        creates: "{{ jboss_eap_install_dir }}/wildfly-{{ jboss_eap_version }}"
 
     - name: Create JBoss EAP Systemd Service File
       copy:
@@ -32,10 +32,10 @@
           
           [Service]
           Type=simple
-          ExecStart={{ jboss_eap_install_dir }}/jboss-eap-{{ jboss_eap_version }}/bin/standalone.sh -c standalone.xml
-          ExecStop={{ jboss_eap_install_dir }}/jboss-eap-{{ jboss_eap_version }}/bin/jboss-cli.sh --connect command=:shutdown
-          User=jboss
-          Group=jboss
+          ExecStart={{ jboss_eap_install_dir }}/wildfly-{{ jboss_eap_version }}/bin/standalone.sh -c standalone.xml
+          ExecStop={{ jboss_eap_install_dir }}/wildfly-{{ jboss_eap_version }}/bin/jboss-cli.sh --connect command=:shutdown
+          User=root
+          Group=root
           Restart=always
           
           [Install]
