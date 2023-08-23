@@ -27,7 +27,7 @@
         src: "/tmp/wildfly-{{ jboss_eap_version }}.zip"
         dest: "{{ jboss_eap_install_dir }}"
         remote_src: yes
-        creates: "{{ jboss_eap_install_dir }}/jboss-eap-{{ jboss_eap_version }}"
+        creates: "{{ jboss_eap_install_dir }}/wildfly-{{ jboss_eap_version }}"
     - name: Create JBoss EAP Systemd Service File
       copy:
         content: |
