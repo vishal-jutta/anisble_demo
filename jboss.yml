@@ -2,6 +2,8 @@
 - name: Install Red Hat JBoss EAP on RHEL
   hosts: all
   become: false
+  collections:
+    - community.general.redhat_subscription
   vars:
     jboss_eap_version: "7.3.0"
     jboss_eap_install_dir: "/opt/jboss"
