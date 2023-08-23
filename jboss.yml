@@ -27,18 +27,3 @@
         name: "jboss-eap{{ jboss_eap_version | replace('.', '') }}-standalone"
         state: started
         enabled: yes
-
-    - name: Open necessary ports in firewall
-      firewalld:
-        port: "{{ item }}"
-        permanent: true
-        state: enabled
-      loop:
-        - 8080/tcp
-        - 9990/tcp
-
-    - name: Ensure SELinux allows JBoss EAP ports
-      seboolean:
-        name: httpd_can_network_connect
-        state: yes
-        persistent: yes
