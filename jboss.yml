@@ -11,7 +11,7 @@
       command: ansible-galaxy collection install community.general
       
     - name: Add JBoss EAP repository
-      redhat_subscription:
+      community.general.redhat_subscription:
         state: present
         username: vishal_jutta
         password: '@Jammu1993_2@'
