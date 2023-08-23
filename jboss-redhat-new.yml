@@ -9,27 +9,18 @@
   collections:
     - middleware_automation.jws
   pre_tasks:
-    - name: check if we are able to ssh
-      shell:
-         "pwd ; whoami ; ls -l"
-    - name: create dest directory
+    - name: create install directory {{ tomcat_install_dir }}
       file:
         path: /opt
-        state: directory
-    - name: check if we are able to ssh again
-      shell:
-         "pwd ; whoami ; ls -l"  
+        state: directory 
     - name: Download latest JBoss Web Server Zipfile from {{ tomcat_download_url }}
       get_url:
         url: "{{ tomcat_download_url }}"
-        dest: /opt
+        dest: "{{ tomcat_install_dir }}"
       when:
         - tomcat_download_url is defined
-    - name: check if we are able to ssh again again
-      shell:
-         "pwd ; whoami ; ls -l"  
   tasks:
     - name: check if we are able to ssh
       shell:
-         "whoami; cd /tmp ; ls -l"
+         "whoami; cd /{{ tomcat_install_dir }} ; ls -l"
       register: output
