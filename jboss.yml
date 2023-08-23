@@ -2,7 +2,7 @@
 - hosts: all
   become: true
   collections:
-    - community.general.redhat_subscription
+    - community.general
   vars:
     jboss_eap_version: "7.3.0"
     jboss_eap_install_dir: "/opt/jboss"
@@ -11,7 +11,7 @@
       command: ansible-galaxy collection install community.general
       
     - name: Add JBoss EAP repository
-      community.general.redhat_subscription:
+      redhat_subscription:
         state: present
         username: vishal_jutta
         password: '@Jammu1993_2@'
