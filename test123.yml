@@ -3,17 +3,22 @@
   hosts: your_target_host
   become: true
   vars:
-    jboss_eap_version: "7.2.0"
+    jboss_eap_version: "29.0.0.Final"
     jboss_eap_install_dir: "/opt/jboss"
-  tasks:
+  pre_tasks:
+    - name: create install directory {{ jboss_eap_install_dir }}
+      file:
+        path: "{{ jboss_eap_install_dir }}"
+        state: directory
     - name: Download JBoss EAP
       get_url:
-        url: "https://download.jboss.org/redhat/{{ jboss_eap_version }}/eap-{{ jboss_eap_version }}.tar.gz"
-        dest: "/tmp/eap-{{ jboss_eap_version }}.tar.gz"
+        url: "https://github.com/wildfly/wildfly/releases/download/29.0.0.Final/wildfly-{{ jboss_eap_version }}.zip"
+        dest: "/tmp/eap-{{ jboss_eap_version }}.zip"
 
+  tasks: 
     - name: Extract JBoss EAP
       ansible.builtin.unarchive:
-        src: "/tmp/eap-{{ jboss_eap_version }}.tar.gz"
+        src: "/tmp/eap-{{ jboss_eap_version }}.zip"
         dest: "{{ jboss_eap_install_dir }}"
         remote_src: yes
         creates: "{{ jboss_eap_install_dir }}/jboss-eap-{{ jboss_eap_version }}"
