@@ -15,7 +15,7 @@
     - name: Download latest JBoss Web Server Zipfile from {{ tomcat_download_url }}
       get_url:
         url: "{{ tomcat_download_url }}"
-        dest: "{{ tomcat_zipfile }}"
+        #dest: "{{ tomcat_zipfile }}"
       when:
         - tomcat_download_url is defined
   tasks:
