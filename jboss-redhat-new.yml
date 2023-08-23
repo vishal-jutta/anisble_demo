@@ -30,8 +30,9 @@
     - name: start server
       shell:
         "{{ tomcat_home }}/bin/startup.sh"
+    - name: Sleep for {{ tomcat_sleep }} seconds to let Tomcat starts
       wait_for:
-        timeout: 3
+        timeout: "{{ tomcat_sleep }}"
     - name: check server is running
       uri:
         url: "http://localhost:8080/"
