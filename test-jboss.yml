@@ -26,7 +26,7 @@
       ansible.builtin.unarchive:
         src: "/tmp/jboss-eap-{{ jboss_eap_version }}.zip"
         dest: "{{ jboss_eap_install_dir }}"
-        remote_src: yes
+        remote_src: true
 
     - name: Create JBoss EAP Systemd Service File
       copy:
