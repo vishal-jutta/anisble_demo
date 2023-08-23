@@ -1,6 +1,6 @@
 ---
 - name: Install JBoss EAP Standalone on RHEL
-  hosts: your_target_host
+  hosts: all
   become: true
   vars:
     jboss_eap_version: "8.0.0.Beta"
