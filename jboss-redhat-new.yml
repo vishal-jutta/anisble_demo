@@ -10,6 +10,7 @@
     tomcat_setup: true
     tomcat_service_name: tomcat
     tomcat_home: "{{ tomcat_install_dir }}/apache-tomcat-{{tomcat_version}}"
+    tomcat_sleep: 5
   collections:
     - middleware_automation.jws
   roles:
