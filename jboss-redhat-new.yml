@@ -1,7 +1,10 @@
 ---
-- name: JBoss Web Server installation and configuration
-  hosts: all
-  become: yes
-  collections:
-    – middleware_automation.jws
-  tasks :
+- hosts: all
+  become: true
+  collections:
+    - middleware_automation.jws
+  tasks:
+    - name: check if we are able to ssh
+      shell:
+         "whoami; cd /tmp ; ls -l"
+      register: output
