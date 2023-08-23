@@ -11,7 +11,7 @@
       file:
         path: "{{ jboss_eap_install_dir }}"
         state: directory
-    - name: Download JBoss EAP https://github.com/wildfly/wildfly/releases/download/29.0.0.Final/wildfly-29.0.0.Final.zip
+    - name: Download JBoss EAP
       get_url:
         url: "https://github.com/wildfly/wildfly/releases/download/29.0.0.Final/wildfly-{{ jboss_eap_version }}.zip"
         dest: "/tmp/wildfly-{{ jboss_eap_version }}.zip
