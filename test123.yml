@@ -13,7 +13,7 @@
     - name: Download JBoss EAP
       get_url:
         url: "https://github.com/wildfly/wildfly/releases/download/29.0.0.Final/wildfly-{{ jboss_eap_version }}.zip"
-        dest: "/tmp/eap-{{ jboss_eap_version }}.zip"
+        dest: "/tmp/wildfly-{{ jboss_eap_version }}.zip"
 
   tasks: 
     - name: Extract JBoss EAP
