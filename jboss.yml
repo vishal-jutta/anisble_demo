@@ -7,7 +7,7 @@
     jboss_eap_install_dir: "/opt/jboss"
   tasks:
     - name: Add JBoss EAP repository
-      community.general.redhat_subscription:
+      redhat_subscription:
         state: present
         username: "vishal_jutta"
         password: "@Jammu1993_2@"
