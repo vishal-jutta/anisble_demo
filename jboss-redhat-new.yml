@@ -8,6 +8,14 @@
     tomcat_zipfile: “{{tomcat_install_dir}}/tomcat.zip"
   collections:
     - middleware_automation.jws
+  pre-tasks:
+    - name: Download latest JBoss Web Server Zipfile from {{ tomcat_download_url }}
+      get_url:
+        url: "{{ tomcat_download_url }}"
+        dest: "{{ tomcat_zipfile }}"
+        remote_src: yes
+      when:
+        - tomcat_download_url is defined
   tasks:
     - name: check if we are able to ssh
       shell:
