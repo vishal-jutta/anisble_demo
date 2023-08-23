@@ -28,7 +28,7 @@
     - name: check server is running
       uri:
         url: "http://localhost:8080/"
-        status_code: 404
+        status_code: 200
         return_content: no
     - name: Deploy sample Application
       get_url:
