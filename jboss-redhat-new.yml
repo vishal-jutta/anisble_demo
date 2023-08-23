@@ -36,3 +36,12 @@
         dest: "{{ tomcat_home }}/webapps/info.war"
       notify:
         - Restart Tomcat service
+  post_task:
+    - name: Sleep for {{ tomcat_sleep }} seconds to let Tomcat starts
+      wait_for:
+        timeout: "{{ tomcat_sleep }}"
+    - name: Test if the application is running
+      get_url:
+        url: "http://localhost:8080/info/"
+        dest: /tmp/info.txt
+      
