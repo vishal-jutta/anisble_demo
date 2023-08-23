@@ -5,12 +5,17 @@
   vars:
     jboss_eap_version: "8.0.0.Beta"
     jboss_eap_install_dir: "/opt/jboss"
-  tasks:
+    
+  pre_tasks:
+    - name: create install directory {{ jboss_eap_install_dir }}
+      file:
+        path: "{{ jboss_eap_install_dir }}"
+        state: directory
     - name: Download JBoss EAP   https://developers.redhat.com/content-gateway/file/eap/8.4_Beta/jboss-eap-8.0.0.Beta.zip
       get_url:
         url: "https://developers.redhat.com/content-gateway/file/eap/8.4_Beta/jboss-eap-{{ jboss_eap_version }}.zip"
         dest: "/tmp/jboss-eap{{ jboss_eap_version }}.zip"
-
+  tasks:
     - name: Extract JBoss EAP
       ansible.builtin.unarchive:
         src: "/tmp/jboss-eap{{ jboss_eap_version }}.zip"
