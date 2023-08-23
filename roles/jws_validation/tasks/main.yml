@@ -1,0 +1,76 @@
+---
+- name: "Verify RPM installed (if used)."
+  ansible.builtin.include_tasks: rpm.yml
+  when:
+    - jws_install_method is defined
+    - jws_install_method == 'rpm'
+
+- name: "Verify user exists."
+  ansible.builtin.include_tasks: user.yml
+  when:
+    - jws_user is defined
+    - jws_uid is defined
+
+- name: "Verify group exists."
+  ansible.builtin.include_tasks: group.yml
+  when:
+    - jws_group is defined
+    - jws_gid is defined
+
+- name: "Verify that service is running."
+  ansible.builtin.include_tasks: service_status.yml
+  when:
+    - jws_service_name is defined
+
+- name: "Check that the version install matches expectation (if requested)."
+  ansible.builtin.include_tasks: jws_version.yml
+  when:
+    - jws_version is defined
+
+- name: "Verify that main server's logfile exists."
+  ansible.builtin.include_tasks: catalina_out.yml
+  when:
+    - catalina_logfile is defined
+
+- name: "Ensure Tomcat HTTP connector is started and listen to the appropriate port"
+  ansible.builtin.include_tasks: check_connector_port.yml
+  vars:
+    bind_address: "{{ jws_listen_http_bind_address }}"
+    listen_port: "{{ jws_listen_http_port }}"
+  when:
+    - jws_listen_http_bind_address is defined
+    - jws_listen_http_port is defined
+
+- name: "Ensure Tomcat HTTPS connector is started and listen to the appropriate port"
+  ansible.builtin.include_tasks: check_connector_port.yml
+  vars:
+    bind_address: "{{ jws_listen_https_bind_address }}"
+    listen_port: "{{ jws_listen_https_port }}"
+  when:
+    - jws_listen_https_enabled is defined
+    - jws_listen_https_enabled
+    - jws_listen_https_bind_address is defined
+    - jws_listen_https_port is defined
+
+- name: "Ensure Tomcat AJP connector is started and listen to the appropriate port"
+  ansible.builtin.include_tasks: check_connector_port.yml
+  vars:
+    bind_address: "{{ jws_listen_ajp_bind_address }}"
+    listen_port: "{{ jws_listen_ajp_port }}"
+  when:
+    - jws_listen_ajp_enabled is defined
+    - jws_listen_ajp_enabled
+    - jws_listen_ajp_bind_address is defined
+    - jws_listen_ajp_port is defined
+
+- name: "Check JWS specific features (if used)"
+  block:
+
+    - name: "Check that CP have been properly applied (if enabled)."
+      ansible.builtin.include_tasks: apply_cp.yml
+      when:
+        - jws_apply_patches is defined
+        - jws_apply_patches
+  when:
+    - jws_version is defined
+    - jws_version | length > 0

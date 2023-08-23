@@ -1,0 +1,18 @@
+---
+- name: "Check prerequirements."
+  ansible.builtin.include_tasks: prereqs.yml
+
+- name: "Ensure all required information are either provided or set to defaults."
+  ansible.builtin.include_tasks: defaults.yml
+
+- name: "Download patches from RHN if requested."
+  ansible.builtin.include_tasks: download_from_rhn.yml
+
+- name: "Verify that patch checksum, if provided, matches."
+  ansible.builtin.include_tasks: checksum.yml
+
+- name: "Deploy file on target and check if its applied already."
+  ansible.builtin.include_tasks: copy_cp_on_target_and_checksum.yml
+
+- name: "Apply CP (if not already applied)."
+  ansible.builtin.include_tasks: perform_update.yml

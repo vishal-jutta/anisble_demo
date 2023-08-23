@@ -1,0 +1,43 @@
+---
+- name: "Check that required parameters have been provided."
+  ansible.builtin.assert:
+    that:
+      - path_to_zipfile_on_target is defined
+      - path_to_zipfile_local is defined
+    quiet: true
+
+- name: "Check download archive path on target: {{ path_to_zipfile_on_target }}"
+  ansible.builtin.stat:
+    path: "{{ path_to_zipfile_on_target }}"
+  register: archive_path
+
+- name: "Retrieve zipfiles (if missing)"
+  block:
+    - name: "Retrieve zipfiles, if missing, from RHN (if credentials provided)"
+      ansible.builtin.include_tasks: download_from_rhn.yml
+      when:
+        - rhn_username is defined and rhn_username | length > 0
+        - rhn_password is defined and rhn_password | length > 0
+
+    - name: "Retrieve zipfiles from URL (if provided)."
+      ansible.builtin.include_tasks: url.yml
+      when:
+        - not rhn_username is defined
+        - not rhn_password is defined
+        - zipfile_url is defined
+  when:
+    - not path_to_zipfile_local is exists
+
+- name: "Copy archives {{ path_to_zipfile_local }} to target nodes: {{ path_to_zipfile_on_target }}"
+  ansible.builtin.copy:
+    src: "{{ path_to_zipfile_local }}"
+    dest: "{{ path_to_zipfile_on_target }}"
+    owner: "{{ jws.user }}"
+    group: "{{ jws.group }}"
+    mode: 0640
+  when:
+    - archive_path is defined
+    - archive_path.stat is defined
+    - not archive_path.stat.exists
+    - path_to_zipfile_local is exists
+  become: yes

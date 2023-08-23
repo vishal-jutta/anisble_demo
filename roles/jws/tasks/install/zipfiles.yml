@@ -1,0 +1,59 @@
+---
+- name: Check arguments
+  ansible.builtin.assert:
+    that:
+      - zipfile_name is defined
+      - zipfile_name != ""
+    quiet: true
+    fail_msg: "With {{ jws.install_method }} install method, 'zipfile_name' needs to be defined (or at least jws_version)"
+
+- name: Add zipfile to unarchive list
+  ansible.builtin.set_fact:
+    zipfiles:
+      - { src: "{{ zipfile_name }}", creates: "{{ jws.install_dir }}/{{ zipfile_rootdir }}/bin" }
+
+- name: Add native zipfile to unarchive list
+  ansible.builtin.set_fact:
+    zipfiles: "{{ zipfiles + [{'src':jws_native_zipfile, 'creates': jws.install_dir + '/' + zipfile_rootdir + '/lib/libtcnative-1.so'}] }}"
+  when:
+    - jws_native
+    - jws_native_zipfile is defined
+    - jws_native_zipfile | length > 0
+
+- name: "Install {{ jws.service.hr_name }} and required binaries from local zipfiles (install method: {{ jws.install_method }})"
+  ansible.builtin.unarchive:
+    remote_src: yes
+    src: "{{ jws_install_dir }}/{{ item.src }}"
+    dest: "{{ jws_install_dir }}"
+    owner: "{{ jws.user }}"
+    group: "{{ jws.group }}"
+    mode: 0750
+    creates: "{{ item.creates }}"
+  loop: "{{ zipfiles }}"
+  register: unarchived_zipfiles
+  notify: "Restart Tomcat service"
+
+- name: Configure custom jws_home
+  when:
+    - jws_home != jws.install_dir + '/' + zipfile_rootdir
+    - unarchived_zipfiles.changed
+  block:
+    - name: Move the zipfile extracted directory to custom jws_home
+      ansible.builtin.copy:
+        src: "{{ jws.install_dir }}/{{ zipfile_rootdir }}/"
+        dest: "{{ jws_home }}"
+        owner: "{{ jws.user }}"
+        group: "{{ jws.group }}"
+        remote_src: yes
+        force: yes
+        mode: preserve
+    - name: Move the version.txt to custom jws_home
+      ansible.builtin.copy:
+        src: "{{ jws.install_dir }}/{{ zipfile_rootdir }}/../version.txt"
+        dest: "{{ jws_home }}/../"
+        owner: "{{ jws.user }}"
+        group: "{{ jws.group }}"
+        remote_src: yes
+        force: yes
+        mode: preserve
+      when: jws_version is defined

@@ -1,0 +1,18 @@
+---
+- name: "Ensure required parameters have been provided."
+  ansible.builtin.assert:
+    that:
+      - zipfile_url is defined
+      - jws_install_dir is defined
+      - zipfile_name is defined
+    quiet: True
+
+- name: Download archive from custom url
+  ansible.builtin.get_url:
+    url: "{{ zipfile_url }}"
+    dest: "{{ jws_install_dir }}/{{ zipfile_name }}"
+    username: "{{ zipfile_url_username | default(omit) }}"
+    password: "{{ zipfile_url_password | default(omit) }}"
+    mode: 0640
+    owner: "{{ jws.user }}"
+    group: "{{ jws.group }}"

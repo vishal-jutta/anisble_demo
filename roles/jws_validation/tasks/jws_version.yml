@@ -1,0 +1,29 @@
+---
+- name: "Verify that required parameters are provided."
+  ansible.builtin.assert:
+    that:
+      - jws_version is defined
+      - jws_home is defined
+    quiet: True
+
+- name: "Load Version files"
+  ansible.builtin.slurp:
+    src: "{{ jws_home }}/../version.txt"
+  register: install_jws_version
+
+- name: "Extract output to text"
+  ansible.builtin.set_fact:
+    version_file_content: "{{ install_jws_version['content'] | b64decode }}"
+
+- name: "Extract version line from file content."
+  ansible.builtin.set_fact:
+    version_line: "{{ version_file_content.splitlines() | first }}"
+
+- name: "Check that version matches {{ jws_version }}"
+  ansible.builtin.assert:
+    that:
+      - version_line is defined
+      - version_line | length > 0
+      - (jws_version | string)[0:3] in version_line
+    quiet: True
+    fail_msg: "Version line {{ version_line[0:3] | default('') }} is not defined or does not contain {{ jws_version }}"

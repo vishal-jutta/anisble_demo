@@ -1,0 +1,88 @@
+---
+argument_specs:
+    main:
+        options:
+            jws_listen_http_bind_address:
+                default: "localhost"
+                description: "Service bind address"
+                type: "str"
+            jws_listen_http_port:
+                default: "8080"
+                description: "Tomcat http listen port"
+                type: "str"
+            jws_user:
+                default: "tomcat"
+                description: "posix user account for service"
+                type: "str"
+            jws_uid:
+                default: "53"
+                description: "posix user UID for service"
+                type: "int"
+            jws_group:
+                default: "tomcat"
+                description: "posix group for service"
+                type: "str"
+            jws_gid:
+                default: "53"
+                description: "posix group GID for service"
+                type: "int"
+            jws_service_name:
+                default: "tomcat"
+                description: "Name for the systemd unit"
+                type: "str"
+            catalina_logfile:
+                default: 'logs/catalina.out'
+                description: "Path relative to tomcat home for catalina.out"
+                type: "str"
+            jws_home:
+                type: "str"
+                description: "home of tomcat/jws installation"
+                default: "/opt/apache-tomcat-{{ tomcat_version }}/"
+            jws_listen_ajp_enabled:
+                # line 28 of jws/defaults/main.yml
+                default: "False"
+                description: "Enable listening on ajp port"
+                type: "str"
+            jws_listen_ajp_address:
+                # line 29 of jws/defaults/main.yml
+                default: "::1"
+                description: "Bind address for ajp"
+                type: "str"
+            jws_listen_ajp_port:
+                # line 30 of jws/defaults/main.yml
+                default: "8009"
+                description: "Tomcat ajp listen port"
+                type: "str"
+            jws_native:
+                type: "bool"
+                default: False
+                description: "Whether to check for correct startup using native libraries"
+            tomcat_version:
+                type: "str"
+                description: "Tomcat version (only usefull if Apache Tomcat and not JWS is used)"
+            jws_validation_catalina_out_min_size:
+                type: "int"
+                description: "Minimal umbers of characters expected in the catalina.out file (for a healthy setup)."
+                default: 500
+            jws_java_version:
+                required: False
+                description: "Whether to check the service is using the specified JVM version"
+                type: "str"
+    downstream:
+        options:
+            jws_version:
+                default: "5.6.0"
+                description: "JWS version to install"
+                type: "str"
+            jws_home:
+                type: "str"
+                description: "home of tomcat/jws installation"
+                default: "/opt/jws-{{ jws_version.split('.')[0] }}.{{ jws_version.split('.')[1] }}/tomcat"
+            jws_service_name:
+                default: "jws5-tomcat"
+                description: "Name for the systemd unit"
+                type: "str"
+            jws_apply_patches:
+                default: False
+                description: "Whether to validate cumulative patch for requested version"
+                type: "bool"

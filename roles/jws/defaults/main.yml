@@ -1,0 +1,101 @@
+---
+# comma separated list of wars to undeploy
+# ex: jws_apps_to_remove: 'docs,ROOT,examples'
+jws_apps_to_remove: 'examples'
+# root directory of installation
+jws_install_dir: /opt
+jws_rpm: jws5
+jws_rpm_root_dir: /opt/rh/jws5/
+
+# if True continue installing even if a running tomcat is found
+jws_force_install: False
+
+# installation method: ['zipfiles', 'rpm']
+jws_install_method: zipfiles
+# path local to controller for offline/download archive files
+jws_archive_repository: "{{ lookup('env', 'PWD') | default('/opt') }}"
+
+# Default version of Apache Tomcat to use if no version is provided
+tomcat_version: 9.0.65
+# Switch to True if you want to also download native bits
+jws_native: False
+jws_native_zipfile: ''
+
+jws_user: tomcat
+jws_uid: 53
+jws_group: tomcat
+jws_gid: 53
+
+# use default paths for tomcat or jws zipfiles depending on install_method; or can be overriden
+jws_setup: True
+
+jws_catalina_base: "{{ lookup('env', 'CATALINA_BASE') }}"
+jws_conf_properties: './conf/catalina.properties'
+jws_conf_policy: './conf/catalina.policy'
+jws_conf_loggging: './conf/logging.properties'
+jws_conf_context: './conf/context.xml'
+jws_conf_server: './conf/server.xml'
+jws_conf_web: './conf/web.xml'
+jws_conf_users: 'conf/tomcat-users.xml'
+jws_conf_jaspic_providers: './conf/jaspic-providers.xml'
+jws_conf_templates_context: 'templates/context.xml.j2'
+jws_conf_templates_server: 'templates/server.xml.j2'
+jws_conf_templates_web: 'templates/web.xml.j2'
+jws_conf_templates_catalina_properties: 'templates/catalina.properties.j2'
+
+jws_shutdown_port: '8005'
+
+# HTTP Connector config
+jws_listen_http_port: '8080'
+jws_listen_http_bind_address: 'localhost'
+jws_listen_http_enabled: True
+
+# HTTPS Connector Config
+jws_listen_https_enabled: False
+jws_listen_https_port: '8443'
+jws_listen_https_bind_address: 'localhost'
+jws_listen_https_servername: 'My Server'
+jws_listen_https_threads_max: 150
+jws_listen_https_connection_timeout: 6000
+jws_listen_https_headers_size: 8192
+jws_listen_https_keystore_file: /etc/ssl/keystore.jks
+jws_listen_https_keystore_password: changeit
+jws_listen_https_client_auth: false
+
+# tomcat AJP Connector Config
+jws_listen_ajp_enabled: False
+jws_listen_ajp_address: '::1'
+jws_listen_ajp_port: '8009'
+jws_listen_ajp_secret_required: True
+jws_listen_ajp_secret: 'secret'
+
+# vault configuration
+jws_tomcat_vault_keystore: 'vault.keystore'
+jws_tomcat_vault_enabled: False
+jws_tomcat_vault_alias: 'my_vault'
+jws_tomcat_vault_storepass: '123456'
+jws_tomcat_vault_iteration: '44'
+jws_tomcat_vault_salt: '1234abcd'
+jws_tomcat_vault_properties: 'vault.properties'
+jws_tomcat_vault_data: 'VAULT.dat'
+jws_tomcat_vault_rpm_name: 'jws5-tomcat-vault'
+
+# modcluster configuration
+jws_modcluster_enabled: False
+jws_modcluster_ip: '127.0.0.1'
+jws_modcluster_port: '6666'
+jws_modcluster_connector_port: '8080'
+jws_modcluster_advertise: 'false'
+# modcluster session configuration
+jws_modcluster_sticky_session: True
+jws_modcluster_sticky_session_force: False
+jws_modcluster_sticky_session_remove: True
+
+# systemd/service settings
+jws_systemd_enabled: False
+jws_systemd_script_interpreter: 'bash'
+jws_systemd_script_shebang: "#!/bin/{{ jws_systemd_script_interpreter }}"
+jws_service_name: 'tomcat'
+jws_service_systemd: "/usr/lib/systemd/system/{{ jws_service_name }}.service"
+jws_service_systemd_type: "simple"
+jws_selinux_enabled: False

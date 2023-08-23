@@ -1,0 +1,16 @@
+---
+- name: Check arguments
+  ansible.builtin.assert:
+    that:
+      - jws.service.name is defined
+    quiet: true
+
+- name: "Enable jws.service"
+  ansible.builtin.service:
+    name: "{{ jws.service.name }}"
+    enabled: yes
+
+- name: "Start jws.service"
+  ansible.builtin.service:
+    name: "{{ jws.service.name }}"
+    state: started

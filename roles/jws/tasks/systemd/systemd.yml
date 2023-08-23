@@ -1,0 +1,68 @@
+---
+- name: Check arguments
+  ansible.builtin.assert:
+    that:
+      - jws.service is defined
+      - jws.service.name is defined
+      - jws.user is defined
+      - jws.group is defined
+      - jws_home is defined
+    quiet: True
+
+- name: "Ensure requirements for systemd"
+  ansible.builtin.include_tasks: ../fastpackage.yml
+  loop_control:
+    loop_var: package_name
+  loop:
+    - systemd
+    - procps-ng
+
+- name: "Set required default for jws_service_conf if not provided."
+  ansible.builtin.set_fact:
+    jws_service_conf: "{{ jws_home }}/conf/{{ jws.service.name }}.conf"
+  when:
+    - not jws_service_conf is defined
+
+- name: "Set required default for jws_service_conf if not provided."
+  ansible.builtin.set_fact:
+    jws_service_script: "{{ jws_home }}/bin/systemd-service.sh"
+  when:
+    - not jws_service_script is defined
+
+- name: "Set required default for jws_service_conf if not provided."
+  ansible.builtin.set_fact:
+    jws_service_pidfile: "{{ jws_home }}/{{ jws_service_name }}.pidfile"
+  when:
+    - not jws_service_pidfile is defined
+
+- name: "Ensure service script is deployed"
+  ansible.builtin.template:
+    src: templates/systemd/service.sh.j2
+    dest: "{{ jws_service_script }}"
+    owner: "{{ jws.user }}"
+    group: "{{ jws.group }}"
+    mode: 0755
+
+- name: "Ensure service configurations files is deployed: {{ jws_service_conf }}"
+  ansible.builtin.template:
+    src: templates/systemd/tomcat.conf.j2
+    dest: "{{ jws_service_conf }}"
+    owner: "{{ jws.user }}"
+    group: "{{ jws.group }}"
+    mode: 0644
+  vars:
+    jws_rpm_java_home: "{{ rpm_java_home.stdout if rpm_java_home is defined else '/usr/lib/jvm/java' }}"
+  notify:
+    - Systemd reload
+    - Ensure Tomcat runs under systemd
+
+- name: "Ensure systemd service is configured"
+  ansible.builtin.template:
+    src: templates/systemd/tomcat.service.j2
+    dest: "{{ jws.service.systemd }}"
+    owner: "{{ jws.user }}"
+    group: "{{ jws.group }}"
+    mode: 0644
+  notify:
+    - Systemd reload
+    - Ensure Tomcat runs under systemd

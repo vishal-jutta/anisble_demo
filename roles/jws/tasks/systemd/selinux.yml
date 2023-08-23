@@ -1,0 +1,50 @@
+---
+- name: "Ensure required parameters are provided."
+  ansible.builtin.assert:
+    that:
+      - jws_home is defined
+      - jws_listen_http_port is defined
+      - jws_listen_https_port is defined
+      - jws_listen_ajp_port is defined
+      - jws_shutdown_port is defined
+    quiet: True
+
+- name: Check if archive contains a selinux policy
+  ansible.builtin.stat:
+    path: "{{ jws_home }}/selinux/jws5-tomcat.if"
+  register: archive_path_selinux
+
+- name: "Compile and install selinux policy"
+  block:
+    - name: Install selinux-policy-devel
+      ansible.builtin.include_tasks: ../fastpackage.yml
+      vars:
+        package_name: selinux-policy-devel
+
+    - name: Check if archive contains a selinux policy
+      ansible.builtin.stat:
+        path: "{{ jws_home }}/selinux/jws5-tomcat.pp"
+      register: policy_path_selinux
+
+    - name: Create selinux policy
+      ansible.builtin.command: make -f /usr/share/selinux/devel/Makefile
+      args:
+        chdir: "{{ jws_home }}/selinux"
+        creates: "{{ jws_home }}/selinux/jws5-tomcat.pp"
+      when:
+        - not policy_path_selinux.stat.exists
+      notify:
+        - "Selinux policy created"
+        - "Apply selinux policy"
+
+    - name: Allow jws.to listen to port
+      community.general.seport:
+        ports:
+          - "{{ jws_listen_http_port }}"
+          - "{{ jws_listen_https_port }}"
+          - "{{ jws_listen_ajp_port }}"
+          - "{{ jws_shutdown_port }}"
+        proto: tcp
+        setype: http_port_t
+        state: present
+  when: archive_path_selinux.stat.exists

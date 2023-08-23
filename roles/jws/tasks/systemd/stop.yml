@@ -1,0 +1,11 @@
+---
+- name: Check arguments
+  ansible.builtin.assert:
+    that:
+      - jws.service.name is defined
+    quiet: true
+
+- name: "Stop jws.service"
+  ansible.builtin.service:
+    name: "{{ jws.service.name }}"
+    state: stopped

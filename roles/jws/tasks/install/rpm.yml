@@ -1,0 +1,55 @@
+---
+- name: Check arguments
+  ansible.builtin.assert:
+    that:
+      - jws.rpm is defined
+      - jws.rpm != ""
+    quiet: true
+    fail_msg: "No RPM package name provided."
+
+- name: "Verify distribution"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "RedHat"
+    quiet: true
+    fail_msg: "RPM install can only work on RedHat based distribution."
+  when:
+    - ansible_os_family is defined
+
+- name: "Verify jws_home"
+  ansible.builtin.assert:
+    that:
+      - jws_home is defined
+      - jws_home == "/opt/rh/jws5/root/usr/share/tomcat"
+    quiet: true
+    fail_msg: "{{ jws.service.hr_name }} HOME {{ jws_home | default('undefined') }} does not match the one provided by RPM."
+
+- name: "Set dnf command for RPM installation"
+  ansible.builtin.set_fact:
+    dnf_command: "'groupinstall'"
+    info_msg: "install {{ jws.rpm }}"
+  when:
+    - not dnf_command is defined
+
+- name: "Set dnf command for RPM uninstall"
+  ansible.builtin.set_fact:
+    info_msg: "remove {{ jws.rpm }}"
+  when:
+    - dnf_command is defined
+    - dnf_command != "'groupinstall'"
+
+- name: "Perform {{ info_msg }}"
+  ansible.builtin.command:
+    cmd: "dnf {{ dnf_command | default('groupinstall') }} -y {{ jws.rpm }}"
+    creates: "{{ jws_rpm_root_dir }}/enable"
+  notify:
+    - Ensure Tomcat runs under systemd
+
+- name: "Install tomcat vault extra packages, if requested."
+  block:
+    - name: "Install package for tomcat_vault: {{ jws.vault.package_name }}"
+      ansible.builtin.package:
+        name: "{{ jws.vault.package_name }}"
+        state: present
+  when:
+    - jws_tomcat_vault_enabled is defined and jws_tomcat_vault_enabled

@@ -1,0 +1,45 @@
+---
+- name: Reload Systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  when:
+    - jws.service is defined
+    - jws.service.enabled is defined
+    - jws.service.enabled
+  listen: "Systemd reload"
+
+- name: "Ensure {{ jws.service.hr_name }} runs under systemd"
+  ansible.builtin.include_tasks: tasks/systemd/service.yml
+  when:
+    - jws.service is defined
+    - jws.service.enabled is defined
+    - jws.service.enabled
+  listen: "Ensure Tomcat runs under systemd"
+
+- name: "Ensure systemd service for {{ jws.service.hr_name }} is stopped."
+  ansible.builtin.include_tasks: tasks/systemd/stop.yml
+  when:
+    - jws.service is defined
+    - jws.service.enabled is defined
+    - jws.service.enabled
+  listen: "Stop Tomcat service"
+
+- name: "Restart {{ jws.service.hr_name }} service"
+  ansible.builtin.service:
+    name: "{{ jws.service.name }}"
+    state: restarted
+  when:
+    - jws.service is defined
+    - jws.service.enabled is defined
+    - jws.service.enabled
+  listen: "Restart Tomcat service"
+
+- name: Install selinux policy
+  ansible.builtin.command: semodule -i jws5-tomcat.pp
+  args:
+    chdir: "{{ jws_home }}/selinux"
+  listen: "Selinux policy created"
+
+- name: Apply selinux policy
+  ansible.builtin.command: "restorecon -r {{ jws.install_dir }}"
+  listen: "Apply selinux policy"

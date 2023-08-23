@@ -1,0 +1,40 @@
+---
+- name: Check arguments
+  ansible.builtin.assert:
+    that:
+      - jws is defined
+      - jws.install_method is defined
+      - jws.install_method in jws.supported_install_method
+    quiet: true
+    fail_msg: "{{ jws.install_method }} does not exist or is not supported. Supported methods are: {{ jws.supported_install_method }}"
+
+- name: "Check working directory {{ jws_archive_repository }} for local repository"
+  ansible.builtin.assert:
+    that:
+      - jws_archive_repository is defined
+      - jws_archive_repository is exists
+      - jws_archive_repository is directory
+    quiet: True
+    fail_msg: "Controller path {{ jws_archive_repository }} for offline resources or downloaded zipfiles is invalid. Check variable jws_archive_repository"
+
+- name: "Display install method"
+  ansible.builtin.debug:
+    msg: "Install method: {{ jws.install_method }}"
+
+- name: "Set defaults values based on facts (if values not provided)"
+  ansible.builtin.include_tasks: install/defaults.yml
+
+- name: "Include installation tasks using zipfiles method"
+  ansible.builtin.include_tasks: install/local.yml
+  when:
+    - jws.install_method == 'zipfiles'
+
+- name: "Include installation tasks for zip operations"
+  ansible.builtin.include_tasks: install/zipfiles.yml
+  when:
+    - jws.install_method != 'rpm'
+
+- name: "Include installation tasks for rpm method"
+  ansible.builtin.include_tasks: install/rpm.yml
+  when:
+    - jws.install_method == 'rpm'

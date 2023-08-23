@@ -1,0 +1,43 @@
+---
+- name: Check that required parameters has been defined
+  ansible.builtin.assert:
+    that:
+      - jws is defined
+      - jws.install_method is defined
+      - jws.install_method in jws.supported_install_method
+    quiet: true
+    fail_msg: "{{ jws.install_method }} does not exist or is not supported. Supported methods are: {{ jws.supported_install_method }}"
+
+- name: "Stop and disable systemd service if running"
+  ansible.builtin.include_tasks: systemd/disable.yml
+  when:
+    - jws_systemd_enabled is defined
+
+- name: "Delete files from server home {{ jws_home }}"
+  block:
+    - name: "Check that server home has been provided"
+      ansible.builtin.assert:
+        that:
+          - jws_home is defined
+        quiet: true
+
+    - name: "Delete files from server home {{ jws_home }}"
+      ansible.builtin.file:
+        path: "{{ jws_home }}"
+        state: absent
+  when:
+    - jws.install_method != 'rpm'
+
+- name: "Perform rpm uninstall"
+  block:
+    - name: "Disable installed server to ensure package is removed"
+      ansible.builtin.file:
+        path: /opt/rh/jws5/enable
+        state: absent
+
+    - name: "Ensure rpms have been removed."
+      ansible.builtin.include_tasks: install/rpm.yml
+      vars:
+        dnf_command: 'groupremove'
+  when:
+    - jws.install_method == 'rpm'

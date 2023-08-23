@@ -1,0 +1,42 @@
+{{ jws_systemd_script_shebang }}
+# {{ ansible_managed }}
+
+readonly MAIN_CLASS='org.apache.catalina.startup.Bootstrap'
+
+{% if jws_home is defined %}
+readonly CATALINA_BASE='{{ jws_home }}'
+export CATALINA_BASE
+{% endif %}
+
+readonly COMMAND=${1:-'status'}
+
+case "${COMMAND}" in
+  status)
+    if [ -e "{{ jws_service_pidfile }}" ]; then
+      echo "Tomcat has no PIDfile, service is not running."
+    else
+      echo "Tomcat PID is $(cat {{ jws_service_pidfile }})."
+    fi
+    ;;
+  start)
+    options="-Dcatalina.base={{ jws.base }} \
+    {% if jws_home is defined %} -Dcatalina.home=${CATALINA_BASE} {% endif %} \
+    {% if jws.java is defined and jws.java.endorsed_dirs is defined %}-Djava.endorsed.dirs=${JAVA_ENDORSED_DIRS} {% endif %} \
+    {% if jws.tmpdir is defined %}-Djava.io.tmpdir={{ jws.tmpdir }} {% endif %} \
+    {% if jws.conf.properties is defined %}-Djava.util.logging.config.file={{ jws.conf.properties }} {% endif %}\
+    -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager"
+
+    flags="$JAVA_OPTS $CATALINA_OPTS"
+    if [ "${SECURITY_MANAGER}" = "true" ] ; then
+      options="${options} -Djava.security.manager -Djava.security.policy==${CATALINA_BASE}/conf/catalina.policy"
+    fi
+    {{ jws_home }}/bin/startup.sh
+    readonly PID=$(ps -F -ww| grep org.apache.catalina.startup.Bootstrap | grep -v grep | awk '{print $2}')
+    echo "Tomcat runs with PID: ${PID}"
+    echo "${PID}" > "{{ jws_service_pidfile }}"
+    ;;
+  stop)
+    {{ jws_home }}/bin/shutdown.sh
+    rm -f "{{ jws_service_pidfile }}"
+    ;;
+esac

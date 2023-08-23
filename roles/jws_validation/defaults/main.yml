@@ -1,0 +1,22 @@
+---
+jws_user: tomcat
+jws_uid: 53
+jws_group: tomcat
+jws_gid: 53
+
+catalina_logfile: logs/catalina.out
+tomcat_version: 9.0.65
+jws_home: "/opt/apache-tomcat-{{ tomcat_version }}/"
+
+jws_service_name: tomcat
+
+jws_listen_http_bind_address: 127.0.0.1
+jws_listen_http_port: 8080
+
+jws_listen_ajp_enabled: False
+jws_listen_ajp_address: '::1'
+jws_listen_ajp_port: '8009'
+
+jws_native: False
+
+jws_validation_catalina_out_min_size: 500

@@ -1,0 +1,385 @@
+---
+argument_specs:
+    main:
+        options:
+            jws_install_dir:
+                # line 4 of jws/defaults/main.yml
+                default: "/opt"
+                description: "JWS/tomcat installation path"
+                type: "str"
+            jws_setup:
+                default: "True"
+                description: "Indicates if the server should be also configure by Ansible, default is True."
+                type: "str"
+            jws_apps_to_remove:
+                # line 2 of jws/defaults/main.yml
+                default: "examples"
+                description: "Comma separated list of apps to undeploy (ex: 'docs,ROOT,examples')"
+                type: "str"
+            jws_install_method:
+                default: "zipfiles"
+                description: "Installation method"
+                type: "str"
+            jws_rpm:
+                # line 4 of jws/defaults/main.yml
+                default: "jws5"
+                description: "Installation RPM version"
+                type: "str"
+            jws_rpm_root_dir:
+                default: "/opt/rh/jws5/"
+                description: "Path to the install dir used by RPM (do not override unless you relocate the RPM"
+                type: "str"
+            jws_version:
+                required: False
+                description: "Version of JWS to install"
+                type: "str"
+            jws_home:
+                description: "Default installation path for JWS archives"
+                type: "str"
+            jws_selinux_enabled:
+                # line 27 of jws/defaults/main.yml
+                default: True
+                description: "Enable selinux policy enforcement for JWS"
+            tomcat_version:
+                # line 7 of jws/defaults/main.yml
+                default: "9.0.60"
+                description: "Version of tomcat to install"
+                type: "str"
+            jws_native:
+                default: False
+                description: "Install native bits; provide a zipfile path below with tomcat, while on JWS it will be interpolated from version"
+                type: "bool"
+            jws_native_zipfile:
+                default: ""
+                type: "str"
+                description: "Filename for native binaries tomcat archive"
+            jws_user:
+                # line 7 of jws/defaults/main.yml
+                default: "tomcat"
+                description: "posix user account for service"
+                type: "str"
+            jws_uid:
+                default: "53"
+                description: "posix user UID for service"
+                type: "int"
+            jws_force_install:
+                description: "Whether to stop any running tomcat process and continue installation"
+                default: false
+                type: "bool"
+            jws_group:
+                # line 8 of jws/defaults/main.yml
+                default: "tomcat"
+                description: "posix group for service"
+                type: "str"
+            jws_gid:
+                default: "53"
+                description: "posix group GID for service"
+                type: "int"
+            jws_java_version:
+                required: False
+                description: "Tomcat java version to install"
+                type: "str"
+            tomcat_java_home:
+                required: False
+                description: "JAVA_HOME to use for starting Tomcat"
+                type: "str"
+            jws_catalina_base:
+                # line 10 of jws/defaults/main.yml
+                default: "{{ lookup('env','CATALINA_BASE') }}"
+                description: "Tomcat catalina base env variable"
+                type: "str"
+            jws_conf_properties:
+                # line 11 of jws/defaults/main.yml
+                default: "./conf/catalina.properties"
+                description: "Path for tomcat configuration"
+                type: "str"
+            jws_conf_policy:
+                # line 12 of jws/defaults/main.yml
+                default: "./conf/catalina.policy"
+                description: "Path for tomcat policy configuration"
+                type: "str"
+            jws_conf_loggging:
+                # line 13 of jws/defaults/main.yml
+                default: "./conf/logging.properties"
+                description: "Path for logging configuration"
+                type: "str"
+            jws_conf_context:
+                # line 14 of jws/defaults/main.yml
+                default: "./conf/context.xml"
+                description: "Relative path to context.xml"
+                type: "str"
+            jws_conf_server:
+                # line 15 of jws/defaults/main.yml
+                default: "./conf/server.xml"
+                description: "Relative path to server.xml"
+                type: "str"
+            jws_conf_web:
+                default: "./conf/web.xml"
+                description: "Relative path to web.xml"
+                type: "str"
+            jws_conf_users:
+                default: "conf/tomcat-users.xml"
+                description: "Relative path to tomcat-users.xml"
+                type: "str"
+            jws_conf_jaspic_providers:
+                default: "conf/jaspic-providers.xml"
+                description: "Relative path to jaspic-providers.xml"
+                type: "str"
+            jws_conf_templates_context:
+                # line 18 of jws/defaults/main.yml
+                default: "templates/context.xml.j2"
+                description: "Template to use for context.xml"
+                type: "str"
+            jws_conf_templates_server:
+                # line 19 of jws/defaults/main.yml
+                default: "templates/server.xml.j2"
+                description: "Template to use for server.xml"
+                type: "str"
+            jws_conf_templates_web:
+                # line 20 of jws/defaults/main.yml
+                default: "templates/web.xml.j2"
+                description: "Template to use for web.xml"
+                type: "str"
+            jws_conf_templates_catalina_properties:
+                # line 21 of jws/defaults/main.yml
+                default: "templates/catalina.properties.j2"
+                description: "Template to use for catalina.properties"
+            jws_shutdown_port:
+                # line 22 of jws/defaults/main.yml
+                default: "8005"
+                description: "Tomcat shutdown port"
+                type: "str"
+            jws_listen_http_port:
+                # line 23 of jws/defaults/main.yml
+                default: "8080"
+                description: "Tomcat http listen port"
+                type: "str"
+            jws_listen_http_bind_address:
+                # line 24 of jws/defaults/main.yml
+                default: "localhost"
+                description: "Service bind address"
+                type: "str"
+            jws_listen_http_enabled:
+                # line 25 of jws/defaults/main.yml
+                default: True
+                description: "Enable listening on http port"
+                type: "bool"
+            jws_listen_https_enabled:
+                default: False
+                description: "Enable listening on https connector"
+                type: "bool"
+            jws_listen_https_port:
+                # line 26 of jws/defaults/main.yml
+                default: "8443"
+                description: "Enable listening on https port"
+                type: "str"
+            jws_listen_https_bind_address:
+                default: "localhost"
+                description: "HTTPS Connector bind address"
+                type: "str"
+            jws_listen_https_servername:
+                default: "My Server"
+                description: "HTTPS Connector servername"
+                type: "str"
+            jws_listen_https_threads_max:
+                default: "150"
+                description: "HTTPS Connector max number of threads"
+                type: "int"
+            jws_listen_https_connection_timeout:
+                default: "6000"
+                description: "HTTPS Connector connection timeout"
+                type: "int"
+            jws_listen_https_headers_size:
+                default: "8192"
+                description: "HTTPS Connector headers max size"
+                type: "int"
+            jws_listen_https_keystore_file:
+                default: "/etc/ssl/keystore.jks"
+                description: "Path to Java Keystore file used by the HTTPS Connector"
+                type: "str"
+            jws_listen_https_keystore_password:
+                default: "changeit"
+                description: "Password for Java Keystore file used by the HTTPS Connector"
+                type: "str"
+            jws_listen_https_client_auth:
+                default: "False"
+                description: "HTTPS Connector client auth enable"
+                type: "bool"
+            jws_listen_ajp_enabled:
+                # line 28 of jws/defaults/main.yml
+                default: "False"
+                description: "Enable listening on ajp port"
+                type: "str"
+            jws_listen_ajp_address:
+                # line 29 of jws/defaults/main.yml
+                default: "::1"
+                description: "Bind address for ajp"
+                type: "str"
+            jws_listen_ajp_port:
+                # line 30 of jws/defaults/main.yml
+                default: "8009"
+                description: "Tomcat ajp listen port"
+                type: "str"
+            jws_listen_ajp_secret_required:
+                # line 31 of jws/defaults/main.yml
+                default: True
+                description: "Enable loading secret from vault"
+                type: "bool"
+            jws_listen_ajp_secret:
+                # line 32 of jws/defaults/main.yml
+                default: "secret"
+                description: "Passphrase for vault secret"
+                type: "str"
+            jws_tomcat_vault_keystore:
+                # line 34 of jws/defaults/main.yml
+                default: "vault.keystore"
+                description: "vault keystore filename"
+                type: "str"
+            jws_tomcat_vault_enabled:
+                # line 35 of jws/defaults/main.yml
+                default: False
+                description: "Enable value"
+                type: "bool"
+            jws_tomcat_vault_alias:
+                # line 36 of jws/defaults/main.yml
+                default: "my_vault"
+                description: "Alias for loading from vault"
+                type: "str"
+            jws_tomcat_vault_storepass:
+                # line 37 of jws/defaults/main.yml
+                default: "123456"
+                description: "Tomcat keystore password"
+                type: "str"
+            jws_tomcat_vault_iteration:
+                # line 38 of jws/defaults/main.yml
+                default: "44"
+                description: "TODO document argument"
+                type: "str"
+            jws_tomcat_vault_salt:
+                # line 39 of jws/defaults/main.yml
+                default: "1234abcd"
+                description: "Salt for encrypting tomcat vault"
+                type: "str"
+            jws_tomcat_vault_properties:
+                # line 40 of jws/defaults/main.yml
+                default: "/conf/vault.properties"
+                description: "vault.properties filename"
+                type: "str"
+            jws_tomcat_vault_data:
+                # line 41 of jws/defaults/main.yml
+                default: "VAULT.dat"
+                description: "vault.data filename"
+                type: "str"
+            jws_tomcat_vault_rpm_name:
+                default: "jws5-tomcat-vault"
+                description: "RPM package to install for tomcat vault (only used if install method is 'rpm')."
+                type: "str"
+            jws_modcluster_enabled:
+                # line 42 of jws/defaults/main.yml
+                default: False
+                description: "Enable mod_cluster module"
+                type: "bool"
+            jws_modcluster_ip:
+                # line 43 of jws/defaults/main.yml
+                default: "127.0.0.1"
+                description: "Bind address for mod_cluster"
+                type: "str"
+            jws_modcluster_port:
+                # line 44 of jws/defaults/main.yml
+                default: "6666"
+                description: "mod_cluster port"
+                type: "str"
+            jws_modcluster_connector_port:
+                # line 45 of jws/defaults/main.yml
+                default: "6666"
+                description: "mod_cluster connector port"
+                type: "str"
+            jws_modcluster_advertise:
+                # line 46 of jws/defaults/main.yml
+                default: False
+                description: "Enable mod_cluster advertising"
+                type: "bool"
+            jws_modcluster_sticky_session:
+                # line 48 of jws/defaults/main.yml
+                default: True
+                description: "Enable mod_cluster sticky sessions"
+                type: "bool"
+            jws_modcluster_sticky_session_force:
+                # line 49 of jws/defaults/main.yml
+                default: False
+                description: "Force use of sticky sessions"
+                type: "bool"
+            jws_modcluster_sticky_session_remove:
+                # line 50 of jws/defaults/main.yml
+                default: True
+                description: "Remove sticky session from cookies"
+                type: "bool"
+            jws_systemd_enabled:
+                # line 52 of jws/defaults/main.yml
+                default: False
+                description: "Enable tomcat systemd unit"
+                type: "bool"
+            jws_systemd_script_interpreter:
+                # line 53 of jws/defaults/main.yml
+                default: "bash"
+                description: "Interpreter for systemd unit"
+                type: "str"
+            jws_systemd_script_shebang:
+                # line 54 of jws/defaults/main.yml
+                default: "#!/bin/{{ jws_systemd_script_interpreter }}"
+                description: "Customize sysVinit script sheband"
+                type: "str"
+            jws_service_name:
+                # line 55 of jws/defaults/main.yml
+                default: "tomcat"
+                description: "Name for the systemd unit"
+                type: "str"
+            jws_service_conf:
+                description: "Absolute path to tomcat.conf"
+                type: "str"
+            jws_service_script:
+                description: "Tomcat sysVinit script"
+                type: "str"
+            jws_service_systemd:
+                # line 58 of jws/defaults/main.yml
+                default: "/usr/lib/systemd/system/tomcat.service"
+                description: "Tomcat systemd unit"
+                type: "str"
+            jws_service_pidfile:
+                description: "Absolute path to tomcat PIDfile"
+                type: "str"
+            jws_service_systemd_type:
+                # line 60 of jws/defaults/main.yml
+                default: "simple"
+                description: "Systemd unit type"
+                type: "str"
+            jws_archive_repository:
+                default: "{{ lookup('env', 'PWD') | default('/opt') }}"
+                description: "path local to controller for offline/download archive files"
+                type: "str"
+            jws_java_home:
+                required: False
+                description: "path to the JAVA_HOME to be used by the server"
+                type: "str"
+    downstream:
+        options:
+            jws_version:
+                default: "5.6.0"
+                description: "JWS version to install"
+                type: "str"
+            jws_apply_patches:
+                default: False
+                description: "Install JWS most recent cumulative patch for requested version"
+                type: "bool"
+            jws_rhn_base_url:
+                default: "https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId="
+                description: "Customer Portal Base URL for archive download"
+                type: "str"
+            jws_service_name:
+                default: "jws5-tomcat"
+                description: "Name for the systemd unit"
+                type: "str"
+            jws_selinux_enabled:
+                default: True
+                description: "Enable selinux policy enforcement for JWS"
+                type: "bool"
