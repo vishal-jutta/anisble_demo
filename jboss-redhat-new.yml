@@ -36,7 +36,7 @@
         dest: "{{ tomcat_home }}/webapps/info.war"
       notify:
         - Restart Tomcat service
-  post_task:
+  post_tasks:
     - name: Sleep for {{ tomcat_sleep }} seconds to let Tomcat starts
       wait_for:
         timeout: "{{ tomcat_sleep }}"
