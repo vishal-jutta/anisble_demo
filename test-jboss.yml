@@ -27,9 +27,6 @@
         src: "/tmp/jboss-eap-{{ jboss_eap_version }}.zip"
         dest: "{{ jboss_eap_install_dir }}"
         remote_src: yes
-        creates: "{{ jboss_eap_install_dir }}/jboss-eap-{{ jboss_eap_version }}"
-        extra_opts:
-          - '-z'
 
     - name: Create JBoss EAP Systemd Service File
       copy:
