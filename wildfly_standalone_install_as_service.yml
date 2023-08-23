@@ -62,6 +62,14 @@
         name: httpd_can_network_connect
         state: yes
         persistent: yes
+  post_tasks:
+    - name: Create admin console user for Wildfly
+      command: "sh {{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/bin/add-user.sh admin admin"
+      
+    - name: Deploy sample Application on Wildfly admin console
+      get_url:
+        url: 'http://csci.viu.ca/~barskym/teaching/DM2012/labs/LAB6/Lab6A.war'
+        dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
 
   handlers:
     - name: Reload firewall
