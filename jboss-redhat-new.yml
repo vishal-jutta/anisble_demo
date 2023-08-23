@@ -9,6 +9,9 @@
   collections:
     - middleware_automation.jws
   pre_tasks:
+    - name: check if we are able to ssh
+      shell:
+         "pwd ; whoami; cd /tmp ; ls -l"
     - name: Download latest JBoss Web Server Zipfile from {{ tomcat_download_url }}
       get_url:
         url: "{{ tomcat_download_url }}"
