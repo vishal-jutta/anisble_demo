@@ -13,7 +13,7 @@
       get_url:
         url: "{{ tomcat_download_url }}"
         dest: "{{ tomcat_zipfile }}"
-        remote_src: yes
+      remote_src: yes
       when:
         - tomcat_download_url is defined
   tasks:
