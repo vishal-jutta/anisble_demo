@@ -4,8 +4,7 @@
   become: true
   vars:
     jboss_eap_version: "29.0.0.Final"
-    jboss_eap_install_dir: "/opt/jboss"
-    
+    jboss_eap_install_dir: "/opt/jboss" 
   pre_tasks:
     - name: create install directory {{ jboss_eap_install_dir }}
       file:
@@ -22,12 +21,7 @@
           - tar
         state: present
   tasks:
-    - name: Extract JBoss EAP
-      ansible.builtin.unarchive:
-        src: "/tmp/wildfly-{{ jboss_eap_version }}.zip"
-        dest: "{{ jboss_eap_install_dir }}"
-        remote_src: yes
-        creates: "{{ jboss_eap_install_dir }}/wildfly-{{ jboss_eap_version }}"
+
     - name: Create JBoss EAP Systemd Service File
       copy:
         content: |
