@@ -14,7 +14,7 @@
     - name: Download JBoss EAP 
       get_url:
         url: "https://developers.redhat.com/content-gateway/file/eap/8.4_Beta/jboss-eap-{{ jboss_eap_version }}.zip"
-        dest: "/tmp/"
+        dest: "/tmp/jboss-eap-{{ jboss_eap_version }}.zip"
     - name: Install pre-reqs
       ansible.builtin.yum:
         name:
