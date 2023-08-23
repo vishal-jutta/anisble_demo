@@ -3,7 +3,7 @@
   hosts: all
   become: true
   vars:
-    jboss_eap_version: "8.0.0.Beta"
+    jboss_eap_version: "29.0.0.Final"
     jboss_eap_install_dir: "/opt/jboss"
     
   pre_tasks:
@@ -11,12 +11,10 @@
       file:
         path: "{{ jboss_eap_install_dir }}"
         state: directory
-    - name: Download JBoss EAP 
+    - name: Download JBoss EAP https://github.com/wildfly/wildfly/releases/download/29.0.0.Final/wildfly-29.0.0.Final.zip
       get_url:
-        url: "https://developers.redhat.com/content-gateway/file/eap/8.4_Beta/jboss-eap-{{ jboss_eap_version }}.zip"
-        dest: "/tmp/jboss-eap-{{ jboss_eap_version }}.zip"
-        url_username: 'vishal_jutta'
-        url_password: '@Jammu1993_2023@'
+        url: "https://github.com/wildfly/wildfly/releases/download/29.0.0.Final/wildfly-{{ jboss_eap_version }}.zip"
+        dest: "/tmp/wildfly-{{ jboss_eap_version }}.zip
     - name: Install pre-reqs
       ansible.builtin.yum:
         name:
@@ -26,8 +24,7 @@
   tasks:
     - name: Extract JBoss EAP
       ansible.builtin.unarchive:
-       # src: "/tmp/jboss-eap-{{ jboss_eap_version }}.zip"
-        src: "https://developers.redhat.com/content-gateway/file/eap/8.4_Beta/jboss-eap-{{ jboss_eap_version }}"
+        src: "/tmp/wildfly-{{ jboss_eap_version }}.zip"
         dest: "{{ jboss_eap_install_dir }}"
         remote_src: true
 
@@ -40,8 +37,8 @@
           
           [Service]
           Type=simple
-          ExecStart={{ jboss_eap_install_dir }}/jboss-eap-{{ jboss_eap_version }}/bin/standalone.sh -c standalone.xml
-          ExecStop={{ jboss_eap_install_dir }}/jboss-eap-{{ jboss_eap_version }}/bin/jboss-cli.sh --connect command=:shutdown
+          ExecStart={{ jboss_eap_install_dir }}/wildfly-{{ jboss_eap_version }}.zip/bin/standalone.sh -c standalone.xml
+          ExecStop={{ jboss_eap_install_dir }}/wildfly-{{ jboss_eap_version }}.zip/bin/jboss-cli.sh --connect command=:shutdown
           User=jboss
           Group=jboss
           Restart=always
