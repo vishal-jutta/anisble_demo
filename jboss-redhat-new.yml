@@ -1,0 +1,7 @@
+---
+- name: "JBoss Web Server installation and configuration"
+  hosts: all
+  become: yes
+  collections:
+    – middleware_automation.jws
+  tasks :
