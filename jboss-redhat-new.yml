@@ -11,7 +11,7 @@
   pre_tasks:
     - name: check if we are able to ssh
       shell:
-         "pwd ; whoami; cd /tmp ; ls -l"
+         "pwd ; whoami; cd ~ ; ls -l"
     - name: create dest directory
       file:
         path: $PWD/opt
