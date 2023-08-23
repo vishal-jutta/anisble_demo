@@ -24,9 +24,10 @@
   tasks:
     - name: Extract JBoss EAP
       ansible.builtin.unarchive:
-        src: /tmp/wildfly-{{ jboss_eap_version }}.zip
+        src: "/tmp/wildfly-{{ jboss_eap_version }}.zip"
         dest: "{{ jboss_eap_install_dir }}"
-        remote_src: true
+        remote_src: yes
+        creates: "{{ jboss_eap_install_dir }}/jboss-eap-{{ jboss_eap_version }}"
     - name: Create JBoss EAP Systemd Service File
       copy:
         content: |
