@@ -14,9 +14,11 @@
          "pwd ; whoami; cd ~ ; ls -l"
     - name: create dest directory
       file:
-        path: $PWD/opt
+        path: ~/opt
         state: directory
-        
+    - name: check if we are able to ssh again
+      shell:
+         "pwd ; whoami; cd ~ ; ls -l"  
     - name: Download latest JBoss Web Server Zipfile from {{ tomcat_download_url }}
       get_url:
         url: "{{ tomcat_download_url }}"
