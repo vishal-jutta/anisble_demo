@@ -1,5 +1,5 @@
 ---
-- name: "JBoss Web Server installation and configuration"
+- name: JBoss Web Server installation and configuration
   hosts: all
   become: yes
   collections:
