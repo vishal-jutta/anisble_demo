@@ -1,36 +1,50 @@
 ---
-- hosts: all
+- name: Install JBoss EAP Standalone on RHEL
+  hosts: your_target_host
   become: true
-  collections:
-    - community.general
   vars:
-    jboss_eap_version: "7.3.0"
+    jboss_eap_version: "8.0.0.Beta"
     jboss_eap_install_dir: "/opt/jboss"
   tasks:
-    - name: Install my_collection_name
-      command: ansible-galaxy collection install community.general
+    - name: Download JBoss EAP   https://developers.redhat.com/content-gateway/file/eap/8.4_Beta/jboss-eap-8.0.0.Beta.zip
+      get_url:
+        url: "ttps://developers.redhat.com/content-gateway/file/eap/8.4_Beta/jboss-eap{{ jboss_eap_version }}.zip"
+        dest: "/tmp/jboss-eap{{ jboss_eap_version }}.zip"
 
-    - name: Add JBoss EAP repository
-      community.general.redhat_subscription:
-        state: present
-        username: vishal_jutta
-        password: '@Jammu1993_2@'
-        pool_ids:
-          - 2c94c2e3890c6f900189638350ec3b9a
+    - name: Extract JBoss EAP
+      ansible.builtin.unarchive:
+        src: "/tmp/jboss-eap{{ jboss_eap_version }}.zip"
+        dest: "{{ jboss_eap_install_dir }}"
+        remote_src: yes
+        creates: "{{ jboss_eap_install_dir }}/jboss-eap-{{ jboss_eap_version }}"
 
-    - name: Install JBoss EAP
-      yum:
-        name: "jboss-eap{{ jboss_eap_version | replace('.', '') }}"
-        state: present
+    - name: Create JBoss EAP Systemd Service File
+      copy:
+        content: |
+          [Unit]
+          Description=JBoss EAP Standalone Server
+          After=network.target
+          
+          [Service]
+          Type=simple
+          ExecStart={{ jboss_eap_install_dir }}/jboss-eap-{{ jboss_eap_version }}/bin/standalone.sh -c standalone.xml
+          ExecStop={{ jboss_eap_install_dir }}/jboss-eap-{{ jboss_eap_version }}/bin/jboss-cli.sh --connect command=:shutdown
+          User=jboss
+          Group=jboss
+          Restart=always
+          
+          [Install]
+          WantedBy=multi-user.target
+        dest: "/etc/systemd/system/jboss-eap.service"
 
-    - name: Start and Enable JBoss EAP Service
+    - name: Reload systemd and Start JBoss EAP Service
       systemd:
-        name: "jboss-eap{{ jboss_eap_version | replace('.', '') }}-standalone"
+        name: jboss-eap
         state: started
         enabled: yes
 
     - name: Open necessary ports in firewall
-      firewalld:
+      ansible.builtin.firewalld:
         port: "{{ item }}"
         permanent: true
         state: enabled
@@ -39,7 +53,12 @@
         - 9990/tcp
 
     - name: Ensure SELinux allows JBoss EAP ports
-      seboolean:
+      ansible.builtin.seboolean:
         name: httpd_can_network_connect
         state: yes
         persistent: yes
+
+  handlers:
+    - name: Reload firewall
+      ansible.builtin.firewalld:
+        state: restarted
