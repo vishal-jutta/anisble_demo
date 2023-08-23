@@ -22,9 +22,12 @@
     - name: Download latest JBoss Web Server Zipfile from {{ tomcat_download_url }}
       get_url:
         url: "{{ tomcat_download_url }}"
-        dest: "{{ tomcat_zipfile }}"
+        dest: ~/opt
       when:
         - tomcat_download_url is defined
+   - name: check if we are able to ssh again again
+      shell:
+         "pwd ; whoami; cd ~ ; ls -l"  
   tasks:
     - name: check if we are able to ssh
       shell:
