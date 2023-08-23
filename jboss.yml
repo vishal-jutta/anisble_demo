@@ -1,8 +1,7 @@
 ---
 - hosts: all
   become: true
-  collections:
-    - community.general
+  collections: name: community.general
   vars:
     jboss_eap_version: "7.3.0"
     jboss_eap_install_dir: "/opt/jboss"
