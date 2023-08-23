@@ -9,8 +9,8 @@
     - name: Add JBoss EAP repository
       redhat_subscription:
         state: present
-        username: vishal_jutta
-        password: @Jammu1993_2@
+        username: "vishal_jutta"
+        password: "@Jammu1993_2@"
         pool_ids:
           - 2c94c2e3890c6f900189638350ec3b9a
 
