@@ -6,8 +6,13 @@
     tomcat_download_url: https://archive.apache.org/dist/tomcat/tomcat-9/v{{tomcat_version}}/bin/apache-tomcat-{{tomcat_version}}.zip
     tomcat_install_dir: /opt
     tomcat_zipfile: “{{tomcat_install_dir}}/tomcat.zip"
+    tomcat_java_version: 1.8.0
+    tomcat_setup: true
+    tomcat_service_name: tomcat
   collections:
     - middleware_automation.jws
+  roles:
+    - jws
   pre_tasks:
     - name: create install directory {{ tomcat_install_dir }}
       file:
