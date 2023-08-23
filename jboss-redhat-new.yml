@@ -14,7 +14,7 @@
          "pwd ; whoami; cd /tmp ; ls -l"
     - name: create dest directory
       file:
-        path: /opt
+        path: $PWD/opt
         state: directory
         
     - name: Download latest JBoss Web Server Zipfile from {{ tomcat_download_url }}
