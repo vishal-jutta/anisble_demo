@@ -11,25 +11,20 @@
       when:
         - action == "start"
         
-  handlers:
-    - name: Start the JVM
-      listen: start
-      systemd:
-        name: wildfly
-        state: started
-        daemon_reload: yes
-        enabled: yes
-    - name: Stop the JVM
-      listen: stop
+   - name: Reload systemd and Stop Wildlfy Service
       systemd:
         name: wildfly
         state: stopped
         daemon_reload: yes
         enabled: yes
-    - name: Restart the JVM
-      listen: restart
+      when:
+        - action == "stop"
+
+    - name: Reload systemd and Re-Start Wildlfy Service
       systemd:
         name: wildfly
         state: restarted
         daemon_reload: yes
         enabled: yes
+      when:
+        - action == "restart"
