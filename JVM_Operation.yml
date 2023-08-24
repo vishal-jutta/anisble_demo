@@ -34,7 +34,7 @@
         
     - name: Deploy Application and restart the Service to load the app on JVM
       get_url:
-        url: 'https://github.com/AKSarav/SampleWebApp/raw/master/dist/SampleWebApp.war'
+        url: 'https://osdn.dl.osdn.net/pal/17479/helloworld.war'
         dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
       when:
         - action == "deploy"
