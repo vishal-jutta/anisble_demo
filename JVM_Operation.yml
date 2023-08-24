@@ -5,17 +5,17 @@
     - name: Reload systemd and Start Wildlfy Service
       notify: start
       when:
-        - {{ action }} == "start"
+        - action == "start"
         
     - name: Reload systemd and Stop Wildlfy Service
       notify: stop
       when:
-        - {{ action }} == "stop"
+        - action == "stop"
         
     - name: Reload systemd and Re-Start Wildlfy Service
       notify: restart
       when:
-        - {{ action }} == "restart"
+        - action == "restart"
         
   handlers:
     - name: Start the JVM
