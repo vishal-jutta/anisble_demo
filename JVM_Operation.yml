@@ -3,11 +3,39 @@
   become: true
   tasks:
     - name: Reload systemd and Start Wildlfy Service
+      notify: start
+      when:
+        - {{ action }} == "start"
+        
+    - name: Reload systemd and Stop Wildlfy Service
+      notify: stop
+      when:
+        - {{ action }} == "stop"
+        
+    - name: Reload systemd and Re-Start Wildlfy Service
+      notify: restart
+      when:
+        - {{ action }} == "restart"
+        
+  handlers:
+    - name: Start the JVM
+      listen: start
       systemd:
         name: wildfly
         state: started
+        daemon_reload: yes
         enabled: yes
-  handlers:
-    - name: Reload firewall
-      ansible.builtin.firewalld:
+    - name: Stop the JVM
+      listen: stop
+      systemd:
+        name: wildfly
+        state: stopped
+        daemon_reload: yes
+        enabled: yes
+    - name: Restart the JVM
+      listen: restart
+      systemd:
+        name: wildfly
         state: restarted
+        daemon_reload: yes
+        enabled: yes
