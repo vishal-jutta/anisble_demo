@@ -1,18 +1,24 @@
 ---
-- name: Restart WildFly JVM
-  hosts: all
+- hosts: all
+  become: true
   gather_facts: no
+  vars:
+    wildfly_version: "29.0.0.Final"
+    wildfly_install_dir: "/opt/wildfly"
   tasks:
     - name: Check if WildFly is running
-      command: /opt/wildfly/bin/jboss-cli.sh --connect --command=":read-attribute(name=server-state)" | grep -q "running"
+      command: "sh {{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/bin/jboss-cli.sh --connect --command=":read-attribute(name=server-state)" | grep -q running"
       register: wildfly_running
       ignore_errors: yes
       
-    - name: Restart WildFly if hung
-      when: wildfly_running.rc != 0
-      become: yes
-      shell: "/opt/wildfly/bin/jboss-cli.sh --connect --command=:shutdown(restart=true)"
+    - name: Restart the JVM if it's hung
+      systemd:
+        name: wildfly
+        state: restarted
+        daemon_reload: yes
+        enabled: yes
       register: restart_result
+      when: wildfly_running.rc != 0
       
     - name: Check if WildFly restarted successfully
       debug:
