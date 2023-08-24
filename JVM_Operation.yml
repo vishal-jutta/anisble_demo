@@ -28,3 +28,20 @@
         enabled: yes
       when:
         - action == "restart"
+        
+    - name: Deploy Application and restart the Service to load the app on JVM
+      get_url:
+        url: 'http://csci.viu.ca/~barskym/teaching/DM2012/labs/LAB6/Lab6A.war'
+        dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
+      when:
+        - action == "deploy"
+      notify: deploy
+
+  handlers:
+    - name: Restart the JVM after Deployment
+      listen: deploy
+      systemd:
+        name: wildfly
+        state: restarted
+        daemon_reload: yes
+        enabled: yes
