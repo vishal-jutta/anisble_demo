@@ -7,7 +7,7 @@
     wildfly_install_dir: "/opt/wildfly"
   tasks:
     - name: Check if WildFly is running
-      command: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/bin/jboss-cli.sh --connect --command=':read-attribute(name=server-state)' | grep -q running"
+      shell: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/bin/jboss-cli.sh --connect --command=':read-attribute(name=server-state)' | grep -q running"
       register: wildfly_running
       ignore_errors: yes
       
