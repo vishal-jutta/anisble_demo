@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Reload systemd and Start Wildlfy Service
+      systemd:
+        name: wildfly
+        state: started
+        enabled: yes
+  handlers:
+    - name: Reload firewall
+      ansible.builtin.firewalld:
+        state: restarted
