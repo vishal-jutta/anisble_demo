@@ -11,7 +11,7 @@
       when:
         - action == "start"
         
-   - name: Reload systemd and Stop Wildlfy Service
+    - name: Reload systemd and Stop Wildlfy Service
       systemd:
         name: wildfly
         state: stopped
