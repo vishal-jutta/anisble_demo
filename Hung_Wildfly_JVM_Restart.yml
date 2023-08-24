@@ -10,6 +10,10 @@
       shell: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/bin/jboss-cli.sh --connect --command=':read-attribute(name=server-state)' | grep -q running"
       register: wildfly_running
       ignore_errors: yes
+
+    - name: Check the WildFly running cmd result
+      debug:
+        var: wildfly_running
       
     - name: Restart the JVM if it's hung
       systemd:
