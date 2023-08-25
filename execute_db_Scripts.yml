@@ -14,7 +14,7 @@
       pip:
         name: MySQL-python
         state: present
-    - name: Create MySQL Table {{ mysql_table_name }} in DB {{ mysql_db_name }} 
+    - name: Create MySQL Table
       ansible.builtin.mysql_db:
         name: "{{ mysql_db_name }}"
         state: table
