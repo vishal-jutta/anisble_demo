@@ -3,7 +3,7 @@
   hosts: all
   become: yes
   vars:
-    mysql_db_name: vishal-test-test
+    mysql_db_name: BALIC_POC
     mysql_user: root
     mysql_password: "@Jammu93@"
   pre_tasks:
