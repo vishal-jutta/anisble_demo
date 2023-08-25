@@ -2,13 +2,14 @@
 - name: Create MySQL Table
   hosts: all
   become: yes
-  vars_prompt:
-    - name: mysql_password
-      prompt: Enter the MYSQL DB password
+#  vars_prompt:
+ #   - name: mysql_password
+#      prompt: Enter the MYSQL DB password
   vars:
     mysql_db_name: vishal
     mysql_table_name: demo_list
     mysql_user: root
+    mysql_password: @Jammu93@
   tasks:
     - name: Install MySQL Python package
       pip:
