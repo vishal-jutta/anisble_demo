@@ -16,10 +16,20 @@
         name: pymysql
         state: present  
   tasks:
-    - name: db creation
+    - name: Sample DB - {{ mysql_db_name }} creation Task
       mysql_db:
         name: "{{ mysql_db_name }}"
         state: present
         login_user: "{{ mysql_user }}"
         login_password: "{{ mysql_password }}"
+      register: output
+      
+    - name: Insert Sample Data in to created DB - {{ mysql_db_name }}
+      mysql_db:
+        name: "{{ mysql_db_name }}"
+        state: import
+        target: .sql
+        login_user: "{{ mysql_user }}"
+        login_password: "{{ mysql_password }}"
+      when:
 
