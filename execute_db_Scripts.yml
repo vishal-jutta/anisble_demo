@@ -6,7 +6,7 @@
  #   - name: mysql_password
 #      prompt: Enter the MYSQL DB password
   vars:
-    mysql_db_name: vishal
+    mysql_db_name: vishal_aap_test
     mysql_table_name: demo_list
     mysql_user: root
     mysql_password: '@Jammu93@'
@@ -18,7 +18,7 @@
     - name: Create MySQL Table
       mysql_db:
         name: "{{ mysql_db_name }}"
-        state: table
-        target: "{{ mysql_table_name }}"
+        state: present
+        #target: "{{ mysql_table_name }}"
         login_user: "{{ mysql_user }}"
         login_password: "{{ mysql_password }}"
