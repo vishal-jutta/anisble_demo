@@ -15,7 +15,7 @@
         name: MySQL-python
         state: present
     - name: Create MySQL Table
-      ansible.builtin.mysql_db:
+      community.mysql.mysql_db:
         name: "{{ mysql_db_name }}"
         state: table
         target: "{{ mysql_table_name }}"
