@@ -1,9 +1,12 @@
 ---
 - hosts: all
   become: true
-  gather_facts: no
+  vars:
+    src_folder: "29.0.0.Final"
+    target_folder: "/opt/wildfly"
+    retention_days: 5
   tasks:
-    - name: sync from dest to src
+    - name: Copy Logs from {{ src_folder }} to {{ target_folder }}
       ansible.posix.synchronize:
         mode: pull
         src: /home/ansible
