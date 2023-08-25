@@ -7,7 +7,7 @@
     mysql_user: root
     mysql_password: "@Jammu93@"
   tasks:
-    - name: Create MySQL Table {{ mysql_table_name }} in DB {{ mysql_db_name }} 
+    - name: Create MySQL Database
       ansible.builtin.mysql_db:
         name: "{{ mysql_db_name }}"
         state: present
