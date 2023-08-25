@@ -26,7 +26,7 @@
       
     - name: Check the db creation status
       debug:
-        var: db_creation_output.state
+        var: db_creation_output.invocation.state
       
     - name: Insert Sample Data in to created DB - {{ mysql_db_name }}
       mysql_db:
