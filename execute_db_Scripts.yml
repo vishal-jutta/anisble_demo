@@ -11,6 +11,10 @@
     mysql_user: root
     mysql_password: '@Jammu93@'
   tasks:
+    - name: Install pip
+      yum:
+        name: pip
+        state: present
     - name: Install MySQL Python package
       pip:
         name: MySQL-python
