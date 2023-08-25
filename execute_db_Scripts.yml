@@ -1,7 +1,7 @@
 ---
 - name: Create MySQL Table
   hosts: localhost
-  become: yes
+  become: awx
   vars:
     mysql_db_name: vishal-test-test
     mysql_user: root
@@ -11,7 +11,7 @@
     
   tasks:
     - name: Install collection
-      shell: "pwd ; ls -l ; cd .ansible/collections/ansible_collections ; ls -l "
+      shell: "pwd ; ls -l ; cd ~/.ansible/collections/ansible_collections ; ls -l "
    # - name: db creation
    #   community.mysql.mysql_db:
    #     name: "{{ mysql_db_name }}"
