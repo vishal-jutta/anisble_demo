@@ -16,7 +16,7 @@
         name: pymysql
         state: present  
   tasks:
-    - name: Sample DB - {{ mysql_db_name }} creation Task
+    - name: DB - {{ mysql_db_name }} creation Task
       mysql_db:
         name: "{{ mysql_db_name }}"
         state: present
