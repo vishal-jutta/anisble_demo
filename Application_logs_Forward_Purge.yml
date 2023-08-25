@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+    - name: sync from dest to src
+      ansible.posix.synchronize:
+        mode: pull
+        src: /home/ansible
+        dest: pulled_data
