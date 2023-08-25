@@ -1,6 +1,6 @@
 ---
 - name: Create MySQL Table
-  hosts: all
+  hosts: localhost
   become: yes
   vars:
     mysql_db_name: vishal-test-test
