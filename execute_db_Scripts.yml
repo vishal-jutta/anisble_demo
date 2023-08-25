@@ -10,8 +10,9 @@
   tasks:
     - name: Install collection
       shell: "ansible-galaxy collection install community.mysql"
+      
     - name: Create MySQL Database
-      community.mysql.mysql_db:
+      mysql_db:
         name: "{{ mysql_db_name }}"
         state: present
         login_user: "{{ mysql_user }}"
