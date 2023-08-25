@@ -6,7 +6,15 @@
     mysql_db_name: vishal-test-test
     mysql_user: root
     mysql_password: "@Jammu93@"
-    
+  pre_tasks:
+    - name: Install pip
+      yum:
+        name: pip
+        state: present
+    - name: Install mysql client
+      pip:
+        name: pymysql
+        state: present  
   tasks:
     - name: db creation
       mysql_db:
