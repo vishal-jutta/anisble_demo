@@ -31,5 +31,5 @@
         target: mysql_script.sql
         login_user: "{{ mysql_user }}"
         login_password: "{{ mysql_password }}"
-      when: db_creation_ouput.status == "present"
+      when: db_creation_ouput.state == "present"
 
