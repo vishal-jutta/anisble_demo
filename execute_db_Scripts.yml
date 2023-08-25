@@ -4,6 +4,7 @@
   become: yes
   vars:
     mysql_db_name: BALIC_POC
+    mysql_script_name: "mysql_script.sql"
     mysql_user: root
     mysql_password: "@Jammu93@"
   pre_tasks:
@@ -26,14 +27,14 @@
 
     - name: Copy sql script to target host
       ansible.builtin.copy:
-        src: mysql_script.sql
+        src: "{{ mysql_script_name }}"
         dest: /home/ansible
       
     - name: Insert Sample Data in to created DB - {{ mysql_db_name }}
       mysql_db:
         name: "{{ mysql_db_name }}"
         state: import
-        target: /home/ansible/mysql_script.sql
+        target: "/home/ansible/{{ mysql_script_name }}"
         login_user: "{{ mysql_user }}"
         login_password: "{{ mysql_password }}"
 
