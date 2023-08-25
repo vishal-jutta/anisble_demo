@@ -11,11 +11,11 @@
     
   tasks:
     - name: Install collection
-      shell: "ls -l"
-    - name: db creation
-      community.mysql.mysql_db:
-        name: "{{ mysql_db_name }}"
-        state: present
-        login_user: "{{ mysql_user }}"
-        login_password: "{{ mysql_password }}"
+      shell: "ls -l ; ls -l ~/ ; cd ~ ; ls -l .ansible/collection/"
+   # - name: db creation
+   #   community.mysql.mysql_db:
+   #     name: "{{ mysql_db_name }}"
+   #     state: present
+    #    login_user: "{{ mysql_user }}"
+    #    login_password: "{{ mysql_password }}"
 
