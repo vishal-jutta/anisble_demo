@@ -27,13 +27,13 @@
     - name: Copy sql script to target host
       ansible.builtin.copy:
         src: mysql_script.sql
-        dest: ~
+        dest: /home/ansible
       
     - name: Insert Sample Data in to created DB - {{ mysql_db_name }}
       mysql_db:
         name: "{{ mysql_db_name }}"
         state: import
-        target: ~/mysql_script.sql
+        target: /home/ansible/mysql_script.sql
         login_user: "{{ mysql_user }}"
         login_password: "{{ mysql_password }}"
 
