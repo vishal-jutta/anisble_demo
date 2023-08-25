@@ -2,18 +2,20 @@
 - name: Create MySQL Table
   hosts: all
   become: yes
+  vars_prompt:
+    - name: mysql_password
+      prompt: Enter the MYSQL DB password
   vars:
     mysql_db_name: vishal
     mysql_table_name: demo_list
     mysql_user: root
-    mysql_password: your_mysql_password
   tasks:
     - name: Install MySQL Python package
       pip:
         name: MySQL-python
         state: present
 
-    - name: Create MySQL Table
+    - name: Create MySQL Table {{ mysql_table_name }} in DB {{ mysql_db_name }} 
       ansible.builtin.mysql_db:
         name: "{{ mysql_db_name }}"
         state: table
