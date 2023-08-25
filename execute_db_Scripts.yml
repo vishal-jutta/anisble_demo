@@ -24,6 +24,10 @@
         login_password: "{{ mysql_password }}"
       register: db_creation_output
       
+    - name: Check the db creation status
+      debug:
+        var: db_creation_output.state
+      
     - name: Insert Sample Data in to created DB - {{ mysql_db_name }}
       mysql_db:
         name: "{{ mysql_db_name }}"
