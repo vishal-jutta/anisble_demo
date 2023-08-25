@@ -1,6 +1,6 @@
 ---
 - name: Create MySQL Table
-  hosts: localhost
+  hosts: all
   become: yes
   vars:
     mysql_db_name: vishal-test-test
@@ -10,12 +10,12 @@
     - community.mysql
     
   tasks:
-    - name: Install collection
-      shell: "pwd ; ls -l ; cd ~/.ansible/collections/ansible_collections ; ls -l ; ansible-galaxy collection list"
-  #  - name: db creation
-  #    community.mysql.mysql_db:
-   #     name: "{{ mysql_db_name }}"
-   #     state: present
-    #    login_user: "{{ mysql_user }}"
-    #    login_password: "{{ mysql_password }}"
+    #- name: Install collection
+    #  shell: "pwd ; ls -l ; cd ~/.ansible/collections/ansible_collections ; ls -l ; ansible-galaxy collection list"
+    - name: db creation
+      community.mysql.mysql_db:
+        name: "{{ mysql_db_name }}"
+        state: present
+        login_user: "{{ mysql_user }}"
+        login_password: "{{ mysql_password }}"
 
