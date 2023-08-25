@@ -11,7 +11,7 @@
     
   tasks:
     - name: Install collection
-      shell: "pwd ; ls -l ; cd ~/.ansible/collections/ansible_collections ; ls -l "
+      shell: "pwd ; ls -l ; cd ~/.ansible/collections/ansible_collections ; ls -l ; ansible-galaxy collection list"
     - name: db creation
       community.mysql.mysql_db:
         name: "{{ mysql_db_name }}"
