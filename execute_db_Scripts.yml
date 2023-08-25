@@ -15,10 +15,7 @@
       yum:
         name: pip
         state: present
-    - name: Create MySQL Table
-      mysql_db:
-        name: "{{ mysql_db_name }}"
+    - name: Create new databases with names 'foo' and 'bar'
+      community.mysql.mysql_db:
+        name: demo-aap
         state: present
-        #target: "{{ mysql_table_name }}"
-        login_user: "{{ mysql_user }}"
-        login_password: "{{ mysql_password }}"
