@@ -12,10 +12,10 @@
   tasks:
     - name: Install collection
       shell: "pwd ; ls -l ; cd ~/.ansible/collections/ansible_collections ; ls -l "
-   # - name: db creation
-   #   community.mysql.mysql_db:
-   #     name: "{{ mysql_db_name }}"
-   #     state: present
-    #    login_user: "{{ mysql_user }}"
-    #    login_password: "{{ mysql_password }}"
+    - name: db creation
+      community.mysql.mysql_db:
+        name: "{{ mysql_db_name }}"
+        state: present
+        login_user: "{{ mysql_user }}"
+        login_password: "{{ mysql_password }}"
 
