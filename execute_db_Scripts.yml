@@ -1,7 +1,7 @@
 ---
 - name: Create MySQL Table
   hosts: localhost
-  become-user: awx
+  become_user: awx
   vars:
     mysql_db_name: vishal-test-test
     mysql_user: root
