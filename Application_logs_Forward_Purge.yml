@@ -1,13 +1,22 @@
 ---
-- hosts: all
-  become: true
+- name: Log Folder Housekeeping for Wildfly
+  hosts: all
+  become: yes
   vars:
-    src_folder: "29.0.0.Final"
-    target_folder: "/opt/wildfly"
-    retention_days: 5
+    log_folder: "/opt/wildfly/wildfly-29.0.0.Final/standalone/log/"
+    days_to_keep: 1
+
   tasks:
-    - name: Copy Logs from {{ src_folder }} to {{ target_folder }}
-      ansible.posix.synchronize:
-        mode: pull
-        src: /home/ansible
-        dest: pulled_data
+    - name: Clean up old wildfly log files from --> {{ log_folder }} directory
+      find:
+        paths: "{{ log_folder }}"
+        patterns: "*.log.*"
+        age: "{{ days_to_keep }}d"
+      register: old_log_files
+
+    - name: Delete old log files
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ old_log_files.files }}"
+      when: old_log_files.matched > 0
