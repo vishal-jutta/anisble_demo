@@ -6,14 +6,12 @@
     mysql_db_name: vishal-test-test
     mysql_user: root
     mysql_password: "@Jammu93@"
-  collections:
-    - community.mysql
     
   tasks:
     #- name: Install collection
     #  shell: "pwd ; ls -l ; cd ~/.ansible/collections/ansible_collections ; ls -l ; ansible-galaxy collection list"
     - name: db creation
-      community.mysql.mysql_db:
+      mysql_db:
         name: "{{ mysql_db_name }}"
         state: present
         login_user: "{{ mysql_user }}"
