@@ -22,14 +22,14 @@
         state: present
         login_user: "{{ mysql_user }}"
         login_password: "{{ mysql_password }}"
-      register: output
+      register: db_creation_output
       
     - name: Insert Sample Data in to created DB - {{ mysql_db_name }}
       mysql_db:
         name: "{{ mysql_db_name }}"
         state: import
-        target: .sql
+        target: mysql_script.sql
         login_user: "{{ mysql_user }}"
         login_password: "{{ mysql_password }}"
-      when:
+      when: db_creation_ouput.status == "present"
 
