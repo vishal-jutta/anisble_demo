@@ -16,6 +16,6 @@
         name: pip
         state: present
     - name: Create new databases with names 'foo' and 'bar'
-      community.mysql.mysql_db:
+      mysql_db:
         name: demo-aap
         state: present
