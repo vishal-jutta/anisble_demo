@@ -35,11 +35,9 @@
         - action == "restart"
         
     - name: Deploy Application and restart the Service to load the app on JVM
-      uri:
-        url: 'https://github.com/vishu24262/anisble_demo/raw/main/helloworld.war'
+      get_url:
+        url: 'https://osdn.dl.osdn.net/pal/17479/helloworld.war'
         dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
-        url_username: "vishu24262"
-        url_password: "@Jammu93@"
         validate_certs: false
       when:
         - action == "deploy"
