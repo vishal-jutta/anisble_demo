@@ -38,8 +38,8 @@
       uri:
         url: 'https://github.com/vishu24262/anisble_demo/raw/main/helloworld.war'
         dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
-        url_username: "{{ pull_user }}"
-        url_password: "{{ pull_password }}"
+        url_username: "vishu24262"
+        url_password: "@Jammu93@"
         validate_certs: false
       when:
         - action == "deploy"
