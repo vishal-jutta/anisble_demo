@@ -39,16 +39,19 @@
         url: 'https://osdn.dl.osdn.net/pal/17479/helloworld.war'
         dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
         validate_certs: false
+      register: result
+      until: result.status-code == 200
+      retries: 3
+      delay: 5
       when:
         - action == "deploy"
-      notify:
-        - deploy
-
-  handlers:
+        
     - name: Restart the JVM after Deployment
       systemd:
         name: wildfly
         state: restarted
         daemon_reload: yes
         enabled: yes
-      listen: "deploy"
+      when:
+        - action == "deploy"
+        - result.status_code == 200
