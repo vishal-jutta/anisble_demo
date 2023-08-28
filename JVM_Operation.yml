@@ -36,7 +36,7 @@
         
     - name: Deploy Application and restart the Service to load the app on JVM
       get_url:
-        url: 'https://osdn.dl.osdn.net/pal/17479/helloworld.war'
+        url: 'https://github.com/vishu24262/anisble_demo/blob/main/helloworld.war'
         dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
         url_username: "{{ pull_user }}"
         url_password: "{{ pull_password }}"
