@@ -35,7 +35,7 @@
         - action == "restart"
         
     - name: Deploy Application and restart the Service to load the app on JVM
-      get_url:
+      uri:
         url: 'https://github.com/vishu24262/anisble_demo/raw/main/helloworld.war'
         dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
         url_username: "{{ pull_user }}"
