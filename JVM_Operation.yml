@@ -4,6 +4,8 @@
   vars:
     wildfly_version: "29.0.0.Final"
     wildfly_install_dir: "/opt/wildfly"
+  vars_files:
+    - db_credentials.yml
   tasks:
     - name: Reload systemd and Start Wildlfy Service
       systemd:
@@ -36,8 +38,8 @@
       get_url:
         url: 'https://osdn.dl.osdn.net/pal/17479/helloworld.war'
         dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
-        url_username:
-        url_password: 
+        url_username: "{{ pull_user }}"
+        url_password: "{{ pull_password }}"
         validate_certs: false
       when:
         - action == "deploy"
