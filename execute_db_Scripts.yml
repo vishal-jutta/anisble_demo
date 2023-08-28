@@ -5,8 +5,6 @@
   vars:
     mysql_db_name: BALIC_POC
     mysql_script_name: "mysql_script.sql"
-    #mysql_user: root
-    #mysql_password: "@Jammu93@"
   vars_files:
     - db_credentials.yml
   pre_tasks:
