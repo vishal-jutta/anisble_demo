@@ -41,13 +41,14 @@
         validate_certs: false
       when:
         - action == "deploy"
-      notify: deploy
+      notify:
+        - deploy
 
   handlers:
     - name: Restart the JVM after Deployment
-      listen: deploy
       systemd:
         name: wildfly
         state: restarted
         daemon_reload: yes
         enabled: yes
+      listen: "deploy"
