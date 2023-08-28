@@ -27,3 +27,4 @@
     - name: Check if WildFly restarted successfully
       debug:
         var: restart_result
+      when: wildfly_running.rc != 0
