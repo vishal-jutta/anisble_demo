@@ -7,7 +7,7 @@
     days_to_keep: 1
 
   tasks:
-    - name: Clean up old wildfly log files from --> {{ log_folder }} directory
+    - name: Get old wildfly log files from --> {{ log_folder }} directory
       find:
         paths: "{{ log_folder }}"
         patterns: "*.log.*"
@@ -19,4 +19,9 @@
         path: "{{ item.path }}"
         state: absent
       with_items: "{{ old_log_files.files }}"
+      when: old_log_files.matched > 0
+
+    - name: Display list of log files deleted
+      debug:
+        var: old_log_files
       when: old_log_files.matched > 0
