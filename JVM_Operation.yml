@@ -36,6 +36,8 @@
       get_url:
         url: 'https://osdn.dl.osdn.net/pal/17479/helloworld.war'
         dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
+        url_username:
+        url_password: 
         validate_certs: false
       when:
         - action == "deploy"
