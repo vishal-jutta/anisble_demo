@@ -61,5 +61,10 @@
 
     - name: Print DB import script logs
       debug:
-        var: val_result.query_result[1]
+        var: val_result.query_result[0]
+
+    - name: print this only if matches
+      debug:
+        var: val_result.query_result[0]
+      when: val_result.query_result[0] == 24
 
