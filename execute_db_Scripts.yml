@@ -45,7 +45,7 @@
         login_password: "{{ mysql_password }}"
       register: db_import_logs
 
-    - name: Validate imported data
+    - name: Validate data to ensure proper rows are affected
       mysql_query:
         login_db: "{{ mysql_db_name }}"
         query: "{{ mysql_validatation_query }}"
