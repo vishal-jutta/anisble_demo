@@ -57,5 +57,9 @@
 
     - name: Print DB import script logs
       debug:
-        var: val_result
+        var: val_result.query_result
+
+    - name: Print DB import script logs
+      debug:
+        var: val_result.query_result.COUNT
 
