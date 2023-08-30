@@ -61,5 +61,5 @@
 
     - name: Print DB import script logs
       debug:
-        var: val_result.query_result[0]
+        var: val_result.query_result[1]
 
