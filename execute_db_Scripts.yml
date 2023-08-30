@@ -25,6 +25,10 @@
         login_password: "{{ mysql_password }}"
       register: db_creation_output
 
+    - name: Print DB creation logs
+      debug:
+        var: db_creation_output
+
     - name: Copy sql script to target host
       ansible.builtin.copy:
         src: "{{ mysql_script_name }}"
@@ -37,4 +41,9 @@
         target: "/home/ansible/{{ mysql_script_name }}"
         login_user: "{{ mysql_user }}"
         login_password: "{{ mysql_password }}"
+      register: db_import_logs
+
+    - name: Print DB import script logs
+      debug:
+        var: db_import_logs
 
