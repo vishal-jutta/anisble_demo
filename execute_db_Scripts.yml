@@ -47,3 +47,16 @@
       debug:
         var: db_import_logs
 
+    - name: Validate imported data
+      mysql_db:
+        name: "{{ mysql_db_name }}"
+        state: query
+        query: "SELECT COUNT(*) FROM balic_table;"
+        login_user: "{{ mysql_user }}"
+        login_password: "{{ mysql_password }}"
+      register: val_result
+
+    - name: Print DB import script logs
+      debug:
+        var: val_result
+
