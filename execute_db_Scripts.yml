@@ -5,6 +5,8 @@
   vars:
     mysql_db_name: BALIC_POC
     mysql_script_name: "mysql_script.sql"
+    mysql_validatation_query: "SELECT COUNT(*) FROM balic_table;"
+    rows_affected: 3
   vars_files:
     - db_credentials.yml
   pre_tasks:
@@ -50,7 +52,7 @@
     - name: Validate imported data
       mysql_query:
         login_db: "{{ mysql_db_name }}"
-        query: "SELECT COUNT(*) FROM balic_table;"
+        query: "{{ mysql_validatation_query }}"
         login_user: "{{ mysql_user }}"
         login_password: "{{ mysql_password }}"
       register: val_result
@@ -66,5 +68,5 @@
     - name: print this only if matches
       debug:
         var: val_result.query_result[0]
-      failed_when: not val_result.query_result[0] is search("2")
+      failed_when: not val_result.query_result[0] is search("{{ rows_affected }}")
 
