@@ -41,11 +41,13 @@
         validate_certs: false
         force: true
       register: result
-      until: result.status_code == 200
+      #until: result.status_code == 200
       retries: 2
       delay: 5
       when:
         - action == "deploy"
+    -debug:
+       var: {{ result }}
         
     - name: Restart the JVM after Deployment
       systemd:
