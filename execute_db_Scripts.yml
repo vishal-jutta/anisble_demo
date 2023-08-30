@@ -45,10 +45,6 @@
         login_password: "{{ mysql_password }}"
       register: db_import_logs
 
-    - name: Print DB import script logs
-      debug:
-        var: db_import_logs
-
     - name: Validate imported data
       mysql_query:
         login_db: "{{ mysql_db_name }}"
@@ -56,17 +52,14 @@
         login_user: "{{ mysql_user }}"
         login_password: "{{ mysql_password }}"
       register: val_result
-
-    - name: Print DB import script logs
-      debug:
-        var: val_result.query_result
-
-    - name: Print DB import script logs
-      debug:
-        var: val_result.query_result[0]
-
-    - name: print this only if matches
-      debug:
-        var: val_result.query_result[0]
       failed_when: not val_result.query_result[0] is search("{{ rows_affected }}")
+
+   # - name: Print DB import query results
+   #   debug:
+   #     var: val_result.query_result[0]
+
+   # - name: print this only if matches
+   #   debug:
+   #     var: val_result.query_result[0]
+   #   failed_when: not val_result.query_result[0] is search("{{ rows_affected }}")
 
