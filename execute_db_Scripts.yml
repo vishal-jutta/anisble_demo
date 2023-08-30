@@ -66,5 +66,5 @@
     - name: print this only if matches
       debug:
         var: val_result.query_result[0]
-      when: val_result.query_result[0].contains("27")
+      when: val_result.query_result[0] is search("30")
 
