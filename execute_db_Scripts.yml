@@ -48,7 +48,7 @@
         var: db_import_logs
 
     - name: Validate imported data
-      mysql_db:
+      mysql_query:
         login_db: "{{ mysql_db_name }}"
         query: "SELECT COUNT(*) FROM balic_table;"
         login_user: "{{ mysql_user }}"
