@@ -6,7 +6,7 @@
     mysql_db_name: BALIC_POC
     mysql_script_name: "mysql_script.sql"
     mysql_validatation_query: "SELECT COUNT(*) FROM balic_table;"
-    rows_affected: 3
+    rows_affected: 2
   vars_files:
     - db_credentials.yml
   pre_tasks:
