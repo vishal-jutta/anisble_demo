@@ -38,6 +38,7 @@
         - INSERT INTO balic_table (message) VALUES ('my_long_story')
         - INSERT INTO balic_table (message) VALUES ('my_long_story2')
       register: db_result_op
+      failed_when: db_result_op.rowcount != {{ rows_affected }}
 
     - name: Print PostgreSQL query
       debug:
