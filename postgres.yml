@@ -57,6 +57,7 @@
       community.postgresql.postgresql_script:
         db: "{{ db_name }}"
         path: "/var/lib/pgsql/{{ script_name }}"
+        autocommit: false
       register: db_result_op_script
       failed_when: db_result_op_script.rowcount != {{ rows_affected }}
       when: script_name is defined and script_name != ''
