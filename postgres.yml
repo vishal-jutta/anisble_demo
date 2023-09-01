@@ -23,7 +23,7 @@
       become_user: postgres
       ansible.builtin.copy:
         src: "{{ mysql_script_name }}"
-        dest: /home/ansible
+        dest: /var/lib/pgsql
         
     - name: Create a PostgreSQL database
       become_user: postgres
@@ -55,7 +55,7 @@
       become_user: postgres
       community.postgresql.postgresql_script:
         db: mydb
-        path: /home/ansible/mysql_script.sql
+        path: /var/lib/pgsql/mysql_script.sql
       register: db_result_op_script
       #failed_when: db_result_op.rowcount != {{ rows_affected }}
 
