@@ -34,8 +34,10 @@
       become_user: postgres
       postgresql_query:
         db: mydb
-        query: SELECT * FROM balic_table
-      register: db_resul_op
+        query:
+        - INSERT INTO balic_table (message) VALUES ('my_long_story')
+        - INSERT INTO balic_table (message) VALUES ('my_long_story2')
+      register: db_result_op
 
     - name: Print PostgreSQL query
       debug:
