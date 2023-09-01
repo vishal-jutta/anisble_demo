@@ -53,13 +53,3 @@
         login_password: "{{ mysql_password }}"
       register: val_result
       failed_when: not val_result.query_result[0] is search("{{ rows_affected }}")
-
-   # - name: Print DB import query results
-   #   debug:
-   #     var: val_result.query_result[0]
-
-   # - name: print this only if matches
-   #   debug:
-   #     var: val_result.query_result[0]
-   #   failed_when: not val_result.query_result[0] is search("{{ rows_affected }}")
-
