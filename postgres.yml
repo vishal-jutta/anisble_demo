@@ -81,11 +81,11 @@
       become_user: postgres
       command: "psql -d {{ db_name }} -c 'COMMIT;'"
       register: op1
-      when: db_result_op_script.rc == 0 and script_name is defined and script_name != '' and op.rc == 0
+      when: db_result_op_script.rc == 0 and script_name is defined and script_name != '' and op.rc == 0 and db_result_op_script.stdout == "INSERT 0 {{ rows_affected }}"
 
     - name: Rollback
       become_user: postgres
       command: "psql -d {{ db_name }} -c 'ROLLBACK;'"
       register: op1
-      when: db_result_op_script.rc != 0 and script_name is defined and script_name != '' and op.rc == 0
+      when: db_result_op_script.rc != 0 and script_name is defined and script_name != '' and op.rc == 0 and db_result_op_script.stdout != "INSERT 0 {{ rows_affected }}"
       
