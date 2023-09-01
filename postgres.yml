@@ -48,7 +48,7 @@
       become_user: postgres
       postgresql_script:
         db: mydb
-        path_to_script: "/home/ansible/{{ mysql_script_name }}"
+        path: "/home/ansible/{{ mysql_script_name }}"
       register: db_result_op_script
       failed_when: db_result_op.rowcount != {{ rows_affected }}
 
