@@ -22,7 +22,7 @@
     - name: Copy sql script to target host
       become_user: postgres
       ansible.builtin.copy:
-        src: "{{ mysql_script_name }}"
+        src: pgsql.sql
         dest: /var/lib/pgsql
         
     - name: Create a PostgreSQL database
