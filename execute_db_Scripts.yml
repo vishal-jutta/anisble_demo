@@ -45,6 +45,10 @@
         login_password: "{{ mysql_password }}"
       register: db_import_logs
 
+    - name: Print DB insert logs
+      debug:
+        var: db_import_logs
+
     - name: Validate data to ensure proper rows are affected
       mysql_query:
         login_db: "{{ mysql_db_name }}"
