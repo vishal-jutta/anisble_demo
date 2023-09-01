@@ -41,4 +41,4 @@
 
     - name: Print PostgreSQL query
       debug:
-        var: db_result_op
+        var: db_result_op.rowcount
