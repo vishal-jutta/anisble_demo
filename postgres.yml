@@ -24,7 +24,7 @@
       ansible.builtin.copy:
         src: "{{ script_name }}"
         dest: /var/lib/pgsql
-      when: {{ script_name }} is defined
+      when: "{{ script_name }}" is defined
         
     - name: Create a PostgreSQL database
       become_user: postgres
@@ -47,7 +47,7 @@
         - INSERT INTO balic_table (message) VALUES ('my_long_story3')
       register: db_result_op
       failed_when: db_result_op.rowcount != {{ rows_affected }}
-      when: {{ query }} is defined
+      when: "{{ query }}" is defined
 
     - name: PRINT Query Output
       debug:
