@@ -16,7 +16,7 @@
         state: present
     - name: Install mysql client
       pip:
-        name: pymysql
+        name: psycopg2-binary
         state: present  
   tasks:
     - name: Create a PostgreSQL database
