@@ -3,10 +3,10 @@
   hosts: all
   become: yes
   vars:
-    db_name: BALIC_POC
+    db_name: balic_poc
     query: ""
     script_name: ""
-    rows_affected: 2
+    rows_affected: ""
   vars_files:
     - db_credentials.yml
   pre_tasks:
@@ -43,8 +43,6 @@
         db: "{{ db_name }}"
         query:
         - "{{ query }}"
-        - INSERT INTO balic_table (message) VALUES ('my_long_story2')
-        - INSERT INTO balic_table (message) VALUES ('my_long_story3')
       register: db_result_op
       failed_when: db_result_op.rowcount != {{ rows_affected }}
       when: query is defined and query != ''
