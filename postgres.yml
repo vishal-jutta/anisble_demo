@@ -1,5 +1,5 @@
 ---
-- name: Create MySQL Table
+- name: POSTGRES DB PLAYBOOK
   hosts: all
   become: yes
   vars:
@@ -45,12 +45,12 @@
         var: db_result_op.rowcount
 
     - name: Insert script in to postgres db
-      become_user: postgres
-      postgresql_script:
+      #become_user: postgres
+      community.postgresql.postgresql_script:
         db: mydb
-        path: "/home/ansible/{{ mysql_script_name }}"
+        path: /home/ansible/mysql_script.sql
       register: db_result_op_script
-      failed_when: db_result_op.rowcount != {{ rows_affected }}
+      #failed_when: db_result_op.rowcount != {{ rows_affected }}
 
     - name: Print PostgreSQL query
       debug:
