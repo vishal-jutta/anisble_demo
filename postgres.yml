@@ -33,7 +33,7 @@
     - name: Insert in to postgres db
       become_user: postgres
       postgresql_query:
-        name: mydb
+        db: mydb
         query: SELECT * FROM balic_table
       register: db_resul_op
 
