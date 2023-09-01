@@ -46,7 +46,7 @@
 
     - name: Insert script in to postgres db
       become_user: postgres
-      postgresql_query:
+      postgresql_script:
         db: mydb
         path_to_script: "/home/ansible/{{ mysql_script_name }}"
       register: db_result_op_script
