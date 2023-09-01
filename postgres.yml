@@ -19,6 +19,12 @@
         name: psycopg2-binary
         state: present  
   tasks:
+    - name: Copy sql script to target host
+    become_user: postgres
+      ansible.builtin.copy:
+        src: "{{ mysql_script_name }}"
+        dest: /home/ansible
+        
     - name: Create a PostgreSQL database
       become_user: postgres
       postgresql_db:
