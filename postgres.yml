@@ -3,9 +3,9 @@
   hosts: all
   become: yes
   vars:
-    mysql_db_name: BALIC_POC
-    mysql_script_name: "pgsql.sql"
-    mysql_validatation_query: "SELECT COUNT(*) FROM balic_table;"
+    db_name: BALIC_POC
+    query: ""
+    script_name: ""
     rows_affected: 2
   vars_files:
     - db_credentials.yml
@@ -14,7 +14,7 @@
       yum:
         name: pip
         state: present
-    - name: Install mysql client
+    - name: Install psycopg2-binary client
       pip:
         name: psycopg2-binary
         state: present  
@@ -22,43 +22,46 @@
     - name: Copy sql script to target host
       become_user: postgres
       ansible.builtin.copy:
-        src: pgsql.sql
+        src: "{{ script_name }}"
         dest: /var/lib/pgsql
+      when: {{ script_name }} is defined
         
     - name: Create a PostgreSQL database
       become_user: postgres
       postgresql_db:
-        name: mydb
+        name: "{{ db_name }}"
         state: present
       register: db_result
 
-    - name: Print PostgreSQL module output
+    - name: Print DB - {{ db_name }} creation output
       debug:
         var: db_result
 
-    - name: Insert in to postgres db
+    - name: RUN QUERY in DB - {{ db_name }}
       become_user: postgres
       postgresql_query:
-        db: mydb
+        db: "{{ db_name }}"
         query:
-        - INSERT INTO balic_table (message) VALUES ('my_long_story')
+        - "{{ query }}"
         - INSERT INTO balic_table (message) VALUES ('my_long_story2')
         - INSERT INTO balic_table (message) VALUES ('my_long_story3')
       register: db_result_op
       failed_when: db_result_op.rowcount != {{ rows_affected }}
+      when: {{ query }} is defined
 
-    - name: Print PostgreSQL query
+    - name: PRINT Query Output
       debug:
         var: db_result_op.rowcount
 
-    - name: Insert script in to postgres db
+    - name: RUN SCRIPT in DB - {{ db_name }}
       become_user: postgres
       community.postgresql.postgresql_script:
-        db: mydb
-        path: /var/lib/pgsql/pgsql.sql
+        db: "{{ db_name }}"
+        path: "/var/lib/pgsql/{{ script_name }}"
       register: db_result_op_script
-      #failed_when: db_result_op.rowcount != {{ rows_affected }}
+      failed_when: db_result_op_script.rowcount != {{ rows_affected }}
+      when: {{ script_name }} is defined
 
-    - name: Print PostgreSQL query
+    - name: Print Script Output
       debug:
         var: db_result_op_script.rowcount
