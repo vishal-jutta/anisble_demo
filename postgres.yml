@@ -4,7 +4,7 @@
   become: yes
   vars:
     mysql_db_name: BALIC_POC
-    mysql_script_name: "mysql_script.sql"
+    mysql_script_name: "pgsql.sql"
     mysql_validatation_query: "SELECT COUNT(*) FROM balic_table;"
     rows_affected: 2
   vars_files:
@@ -55,7 +55,7 @@
       become_user: postgres
       community.postgresql.postgresql_script:
         db: mydb
-        path: /var/lib/pgsql/mysql_script.sql
+        path: /var/lib/pgsql/pgsql.sql
       register: db_result_op_script
       #failed_when: db_result_op.rowcount != {{ rows_affected }}
 
