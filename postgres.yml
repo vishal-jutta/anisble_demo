@@ -29,3 +29,10 @@
     - name: Print PostgreSQL module output
       debug:
         var: db_result
+
+    - name: Insert in to postgres db
+      become_user: postgres
+      postgresql_query:
+        name: mydb
+        state: present
+      register: db_result
