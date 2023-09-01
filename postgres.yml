@@ -65,3 +65,30 @@
       debug:
         var: db_result_op_script.rowcount
       when: script_name is defined and script_name != ''
+
+    - name: Exec some sql script
+      become_user: postgres
+      command: "psql -d {{ db_name }} -c 'BEGIN;'"
+      register: op
+
+    - name: RUN SCRIPT in DB again - {{ db_name }}
+      become_user: postgres
+      community.postgresql.postgresql_script:
+        db: "{{ db_name }}"
+        path: "/var/lib/pgsql/{{ script_name }}"
+      register: db_result_op_script
+      failed_when: db_result_op_script.rowcount != {{ rows_affected }}
+      when: script_name is defined and script_name != '' and op.rc == 0
+
+    - name: Commit
+      become_user: postgres
+      command: "psql -d { db_name }} -c 'COMMIT;'"
+      register: op1
+      when: db_result_op_script.rowcount == {{ rows_affected }} and script_name is defined and script_name != '' and op.rc == 0
+
+    - name:Rollback
+      become_user: postgres
+      command: "psql -d { db_name }} -c 'ROLLBACK;'"
+      register: op1
+      when: db_result_op_script.rowcount != {{ rows_affected }} and script_name is defined and script_name != '' and op.rc == 0
+      
