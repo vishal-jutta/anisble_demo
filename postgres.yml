@@ -20,7 +20,7 @@
         state: present  
   tasks:
     - name: Create a PostgreSQL database
-      become: postgres
+      become_user: postgres
       postgresql_db:
         name: mydb
         state: present
