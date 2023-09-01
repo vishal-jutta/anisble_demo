@@ -43,3 +43,15 @@
     - name: Print PostgreSQL query
       debug:
         var: db_result_op.rowcount
+
+    - name: Insert script in to postgres db
+      become_user: postgres
+      postgresql_query:
+        db: mydb
+        path_to_script: "/home/ansible/{{ mysql_script_name }}"
+      register: db_result_op_script
+      failed_when: db_result_op.rowcount != {{ rows_affected }}
+
+    - name: Print PostgreSQL query
+      debug:
+        var: db_result_op_script.rowcount
