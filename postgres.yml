@@ -34,5 +34,9 @@
       become_user: postgres
       postgresql_query:
         name: mydb
-        state: present
-      register: db_result
+        query: SELECT * FROM balic_table
+      register: db_resul_op
+
+    - name: Print PostgreSQL query
+      debug:
+        var: db_result_op
