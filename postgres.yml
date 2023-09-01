@@ -24,7 +24,7 @@
       ansible.builtin.copy:
         src: "{{ script_name }}"
         dest: /var/lib/pgsql
-      when: script_name is defined
+      when: script_name is defined and script_name != ''
         
     - name: Create a PostgreSQL database
       become_user: postgres
@@ -47,11 +47,12 @@
         - INSERT INTO balic_table (message) VALUES ('my_long_story3')
       register: db_result_op
       failed_when: db_result_op.rowcount != {{ rows_affected }}
-      when: query is defined
+      when: query is defined and query != ''
 
     - name: PRINT Query Output
       debug:
         var: db_result_op.rowcount
+      when: query is defined and query != ''
 
     - name: RUN SCRIPT in DB - {{ db_name }}
       become_user: postgres
@@ -60,8 +61,9 @@
         path: "/var/lib/pgsql/{{ script_name }}"
       register: db_result_op_script
       failed_when: db_result_op_script.rowcount != {{ rows_affected }}
-      when: script_name is defined
+      when: script_name is defined and script_name != ''
 
     - name: Print Script Output
       debug:
         var: db_result_op_script.rowcount
+      when: script_name is defined and script_name != ''
