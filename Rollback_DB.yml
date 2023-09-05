@@ -5,7 +5,13 @@
   vars_files:
     - db_credentials.yml
   tasks:
-    - name: Rollback
+    - name: Copy rollback script to target host
       become_user: postgres
-      command: "psql -d {{ db_name }} -c 'ROLLBACK;'"
-      register: op1
+      ansible.builtin.copy:
+        src: rollback.sql
+        dest: /var/lib/pgsql
+    - name: RUN Rollback in DB - {{ db_name }}
+      become_user: postgres
+      community.postgresql.postgresql_script:
+        db: "{{ db_name }}"
+        path: /var/lib/pgsql/rollback.sql
