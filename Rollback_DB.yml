@@ -1,17 +1,11 @@
 ---
-- name: POSTGRES DB COMMIT PLAYBOOK
+- name: POSTGRES DB ROLLBACK PLAYBOOK
   hosts: all
   become: yes
   vars_files:
     - db_credentials.yml
   tasks:
-    - name: Copy rollback script to target host
+    - name: Rollback
       become_user: postgres
-      ansible.builtin.copy:
-        src: rollback.sql
-        dest: /var/lib/pgsql
-    - name: RUN Rollback in DB - {{ db_name }}
-      become_user: postgres
-      community.postgresql.postgresql_script:
-        db: "{{ db_name }}"
-        path: /var/lib/pgsql/rollback.sql
+      command: "psql -d {{ db_name }} -c 'delete from balic_table where id in (1,2,3);'"
+      register: op1
