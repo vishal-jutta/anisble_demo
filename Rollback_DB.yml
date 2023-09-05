@@ -7,5 +7,5 @@
   tasks:
     - name: Rollback
       become_user: postgres
-      command: "psql -d {{ db_name }} -c 'delete from balic_table where id in (1,2,3);'"
+      command: "psql -d {{ db_name }} -c 'delete from balic_table where id in (4,5,6);'"
       register: op1
