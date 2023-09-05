@@ -1,0 +1,11 @@
+---
+- name: POSTGRES DB COMMIT PLAYBOOK
+  hosts: all
+  become: yes
+  vars_files:
+    - db_credentials.yml
+  tasks:
+    - name: Rollback
+      become_user: postgres
+      command: "psql -d {{ db_name }} -c 'ROLLBACK;'"
+      register: op1
