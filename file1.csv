@@ -1,3 +1,3 @@
-hostname,ram,cpu
-abc,8,2
-def,4,4
+HOSTNAME,RAM_SIZE,CPU_CORES
+host1,8,2
+host2,4,4
