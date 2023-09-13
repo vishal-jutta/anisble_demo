@@ -13,4 +13,5 @@
       delegate_to: localhost
     - name: print the op
       debug:
-        msg: Value is {{ values.list[0] }}
+        msg: Value is {{ item.HOSTNAME }}
+      loop: "{{ values.list }}"
