@@ -4,11 +4,11 @@
   tasks:
     - name: Copy file to target host
       ansible.builtin.copy:
-        src: file1.xlsx
+        src: file1.csv
         dest: /tmp
     - name: read the excel file
       read_csv:
-        path: /tmp/file1.xlsx
+        path: /tmp/file1.csv
       register: op
     - name: print the op
       debug:
