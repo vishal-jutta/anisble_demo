@@ -12,4 +12,4 @@
       register: op
     - name: print the op
       debug:
-        msg: Value is {{ op }}
+        msg: Value is {{ op.list[0].hostname }}
