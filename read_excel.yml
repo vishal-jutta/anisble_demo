@@ -1,13 +1,15 @@
 ---
-- hosts: localhost
+- hosts: all
   become: yes
   tasks:
+    - name: Copy file to target host
+      ansible.builtin.copy:
+        src: file1.xls
+        dest: /tmp
     - name: read the excel file
       read_csv:
-        path: file1.xls
+        path: /tmp/file1.xls
       register: op
-      delegate_to: localhost
-
     - name: print the op
       debug:
         msg: Value is {{ op }}
