@@ -11,5 +11,5 @@
     - name: print the op
       debug:
         msg: "Value is {{ item.HOSTNAME }} {{ item.RAM_SIZE }}"
-      loop: "{{ values }}"
+      loop: "{{ values.list }}"
       delegate_to: localhost
