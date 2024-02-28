@@ -15,8 +15,8 @@
       uri:
         url: "{{ jenkins_base_url }}/job/{{ jenkins_job_name }}/build?token={{ jenkins_trigger_token }}"
         method: POST
-        user: "{{ jenkins_username }}"
-        password: "{{ jenkins_token }}"
+        url_username: "{{ jenkins_username }}"
+        url_password: "{{ jenkins_token }}"
         force_basic_auth: yes
         status_code: 201
       register: result
