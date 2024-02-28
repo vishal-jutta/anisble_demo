@@ -8,7 +8,7 @@
     jenkins_token: "admin"
     jenkins_job_name: "SBI_POC"
     jenkins_base_url: "http://192.168.29.57:8090"
-    jenkins_trigger_token: "build"
+    jenkins_trigger_token: "1119e7a2da9856b252f911fe0fcf540621"
 
   tasks:
     - name: Trigger Jenkins job
@@ -17,9 +17,8 @@
         method: POST
         user: "{{ jenkins_username }}"
         password: "{{ jenkins_token }}"
-        force_basic_auth: no
+        force_basic_auth: yes
         status_code: 201
-        validate_certs: false
       register: result
 
     - name: Check response
