@@ -5,10 +5,10 @@
 
   vars:
     jenkins_username: "vishal_jutta"
-    jenkins_token: "admin"
+    jenkins_token: "1119e7a2da9856b252f911fe0fcf540621"
     jenkins_job_name: "SBI_POC"
     jenkins_base_url: "http://192.168.29.57:8090"
-    jenkins_trigger_token: "1119e7a2da9856b252f911fe0fcf540621"
+    jenkins_trigger_token: "build"
 
   tasks:
     - name: Trigger Jenkins job
