@@ -10,13 +10,13 @@
     artifact_group_id: "com.web.war"
     artifact_artifact_id: "SBI_POC"
     artifact_version: "1.0.0"
-    artifact_classifier: "null"  # If there is a classifier, otherwise, set to null
+    artifact_classifier: ""  # If there is a classifier, otherwise, set to null
     destination_directory: "/tmp"
 
   tasks:
     - name: Generate URL for the artifact
       set_fact:
-        artifact_url: "{{ nexus_repository_url }}/{{ artifact_group_id | replace('.', '/') }}/{{ artifact_artifact_id }}/{{ artifact_version }}/{{ artifact_artifact_id }}-{{ artifact_version }}{{ '-' if artifact_classifier else '' }}{{ artifact_classifier }}.jar"
+        artifact_url: "{{ nexus_repository_url }}/{{ artifact_group_id | replace('.', '/') }}/{{ artifact_artifact_id }}/{{ artifact_version }}/{{ artifact_artifact_id }}-{{ artifact_version }}{{ '-' if artifact_classifier else '' }}{{ artifact_classifier }}.war"
 
     - name: Download artifact
       uri:
@@ -24,7 +24,7 @@
         user: "{{ nexus_username }}"
         password: "{{ nexus_password }}"
         method: GET
-        dest: "{{ destination_directory }}/{{ artifact_artifact_id }}-{{ artifact_version }}{{ '-' if artifact_classifier else '' }}{{ artifact_classifier }}.jar"
+        dest: "{{ destination_directory }}/{{ artifact_artifact_id }}-{{ artifact_version }}{{ '-' if artifact_classifier else '' }}{{ artifact_classifier }}.war"
       register: download_result
 
     - name: Check download status
