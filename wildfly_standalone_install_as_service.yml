@@ -70,6 +70,11 @@
       get_url:
         url: 'http://csci.viu.ca/~barskym/teaching/DM2012/labs/LAB6/Lab6A.war'
         dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
+    - name: Deploy War file
+      copy:
+        src: "/tmp/SBI_POC-1.0.0.war"
+        dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
+        remote_src: yes
 
   handlers:
     - name: Reload firewall
