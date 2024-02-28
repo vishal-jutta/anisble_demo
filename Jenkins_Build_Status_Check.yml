@@ -2,7 +2,7 @@
 - name: Get latest Jenkins build and wait for it to finish
   hosts: localhost
   vars:
-    jenkins_url: "http://192.168.29.57:8090"
+    jenkins_url: "http://192.168.29.57"
     jenkins_job_name: "SBI_POC"
     jenkins_username: "vishal_jutta"
     jenkins_token: "1119e7a2da9856b252f911fe0fcf540621"
@@ -12,7 +12,7 @@
   tasks:
     - name: Get latest build information from Jenkins
       uri:
-        url: "{{ jenkins_url }}/job/{{ jenkins_job_name }}/lastBuild/api/json"
+        url: "{{ jenkins_url }}:8090/job/{{ jenkins_job_name }}/lastBuild/api/json"
         method: GET
         url_username: "{{ jenkins_username }}"
         url_password: "{{ jenkins_token }}"
@@ -26,8 +26,8 @@
         timeout: "{{ wait_timeout }}"
         delay: "{{ wait_delay }}"
         sleep: "{{ wait_delay }}"
-        port: 8090
-        host: '{{ jenkins_url }}/job/{{ jenkins_job_name }}/lastBuild/api/json'
+        #port: 8090
+        host: '{{ jenkins_url }}:8090/job/{{ jenkins_job_name }}/lastBuild/api/json'
         search_regex: '"building":false'
       when: latest_build_info.status == 200 and latest_build_info.json.building
 
