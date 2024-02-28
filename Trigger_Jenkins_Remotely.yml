@@ -18,7 +18,7 @@
         user: "{{ jenkins_username }}"
         password: "{{ jenkins_token }}"
         force_basic_auth: yes
-        status_code: 201
+        #status_code: 201
       register: result
 
     - name: Check response
