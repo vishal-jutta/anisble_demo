@@ -5,14 +5,15 @@
 
   vars:
     jenkins_username: "vishal_jutta"
-    jenkins_token: "build"
+    jenkins_token: "admin"
     jenkins_job_name: "SBI_POC"
     jenkins_base_url: "http://192.168.29.57:8090"
+    jenkins_trigger_token: "build"
 
   tasks:
     - name: Trigger Jenkins job
       uri:
-        url: "{{ jenkins_base_url }}/job/{{ jenkins_job_name }}/build"
+        url: "{{ jenkins_base_url }}/job/{{ jenkins_job_name }}/build?token={{ jenkins_trigger_token }}"
         method: POST
         user: "{{ jenkins_username }}"
         password: "{{ jenkins_token }}"
