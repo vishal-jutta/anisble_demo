@@ -17,8 +17,9 @@
         method: POST
         user: "{{ jenkins_username }}"
         password: "{{ jenkins_token }}"
-        force_basic_auth: yes
-        #status_code: 201
+        force_basic_auth: no
+        status_code: 201
+        validate_certs: false
       register: result
 
     - name: Check response
