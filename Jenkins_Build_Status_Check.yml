@@ -19,7 +19,7 @@
         return_content: yes
         validate_certs: false
         force_basic_auth: true
-      register: latest_build_inf
+      register: latest_build_info
 
     - name: Wait for the latest build to finish
       wait_for:
@@ -28,8 +28,7 @@
         sleep: "{{ wait_delay }}"
         port: 8090
         host: "{{ jenkins_url }}/job/{{ jenkins_job_name }}/lastBuild/api/json"
-        search_regex: '"building":false'
-      register: latest_build_info
+        search_regex: '"building":false
       when: latest_build_info.status == 200 and latest_build_info.json.building
 
     - name: Display a message when the build finishes
