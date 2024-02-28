@@ -17,6 +17,7 @@
         user: "{{ jenkins_username }}"
         password: "{{ jenkins_token }}"
         return_content: yes
+        validate_certs: false
       register: latest_build_info
 
     - name: Wait for the latest build to finish
