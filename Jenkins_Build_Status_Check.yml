@@ -6,8 +6,8 @@
     jenkins_job_name: "SBI_POC"
     jenkins_username: "vishal_jutta"
     jenkins_token: "1119e7a2da9856b252f911fe0fcf540621"
-    wait_timeout: 60  # Adjust timeout as needed
-    wait_delay: 10     # Adjust delay between checks
+    wait_timeout: 30  # Adjust timeout as needed
+    wait_delay: 5     # Adjust delay between checks
 
   tasks:
     - name: Get latest build information from Jenkins
