@@ -26,7 +26,7 @@
         timeout: "{{ wait_timeout }}"
         delay: "{{ wait_delay }}"
         sleep: "{{ wait_delay }}"
-        port: 8090
+        port: "8090"
         host: "{{ jenkins_url }}/job/{{ jenkins_job_name }}/lastBuild/api/json"
         search_regex: '"building":false
       when: latest_build_info.status == 200 and latest_build_info.json.building
