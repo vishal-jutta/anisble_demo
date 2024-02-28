@@ -7,7 +7,7 @@
     jenkins_username: "vishal_jutta"
     jenkins_token: "build"
     jenkins_job_name: "SBI_POC"
-    jenkins_base_url: "http://192.168.29.57:8090/"
+    jenkins_base_url: "http://192.168.29.57:8090"
 
   tasks:
     - name: Trigger Jenkins job
