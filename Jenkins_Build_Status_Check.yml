@@ -10,6 +10,9 @@
     wait_delay: 5     # Adjust delay between checks
 
   tasks:
+    - name: delay timer
+      pause:
+        seconds: 30
     - name: Get latest build information from Jenkins
       uri:
         url: "{{ jenkins_url }}:8090/job/{{ jenkins_job_name }}/lastBuild/api/json"
