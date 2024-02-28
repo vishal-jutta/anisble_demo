@@ -1,6 +1,6 @@
 ---
 - name: Trigger Jenkins job remotely
-  hosts: all
+  hosts: localhost
   gather_facts: no
 
   vars:
