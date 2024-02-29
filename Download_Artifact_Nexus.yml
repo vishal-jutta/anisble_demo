@@ -7,8 +7,8 @@
     nexus_username: "admin"
     nexus_password: "admin"
     nexus_repository_url: "http://192.168.29.57:8081/repository/mavenRepo/"
-    artifact_group_id: "com.web.war"
-    artifact_artifact_id: "SBI_POC"
+    artifact_group_id: "koddas.web.war"
+    artifact_artifact_id: "wwp"
     artifact_version: "1.0.0"
     artifact_classifier: ""  # If there is a classifier, otherwise, set to null
     destination_directory: "/tmp"
