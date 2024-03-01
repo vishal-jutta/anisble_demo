@@ -72,7 +72,7 @@
         dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
     - name: Deploy War file
       copy:
-        src: "/tmp/wwp-1.0.0.war"
+        src: "/tmp/SBI_POC-1.0.war"
         dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
         remote_src: yes
 
