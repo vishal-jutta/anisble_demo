@@ -1,0 +1,23 @@
+---
+- name: Check if Java is installed
+  hosts: all
+  tasks:
+    - name: Run java -version command
+      command: java -version
+      register: java_version_output
+      ignore_errors: true
+
+    - name: Check if Java is installed
+      fail:
+        msg: "Java is not installed"
+      when: "'java version' not in java_version_output.stderr"
+
+    - name: Check Wildfly process
+      shell: ps aux | grep "wildfly"
+      register: wildfly_process
+      ignore_errors: true
+
+    - name: Check if Wildfly is running
+      fail:
+        msg: "Wildfly is not running"
+      when: wildfly_process.rc != 0
