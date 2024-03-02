@@ -1,6 +1,7 @@
 ---
 - name: Check if Java is installed
   hosts: all
+  become: true
   tasks:
     - name: Run java -version command
       command: java -version
@@ -9,19 +10,19 @@
 
     - name: Check if Java is installed
       fail:
-        msg: "Java is not installed"
+        msg: "Java is not installed --> Prechecks FAILED"
       when: "'openjdk version' not in java_version_output.stderr"
 
     - name: Check Wildfly process
-      shell: ps aux | grep "wildfly"
+      shell: /opt/wildfly/wildfly-29.0.0.Final/bin/jboss-cli.sh -c command=':read-attribute(name=server-state)' | grep running
       register: wildfly_process
       ignore_errors: true
 
     - name: Check if Wildfly is running
       fail:
-        msg: "Wildfly is not running"
+        msg: "Wildfly is not running  --> Prechecks FAILED"
       when: wildfly_process.rc != 0
 
     - name: Appication Precheck
       debug:
-        msg: "Prechecks are Success"
+        msg: "Prechecks PASSED"
