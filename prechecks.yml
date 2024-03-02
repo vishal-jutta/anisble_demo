@@ -21,3 +21,7 @@
       fail:
         msg: "Wildfly is not running"
       when: wildfly_process.rc != 0
+
+    - name: Appication Precheck
+      debug:
+        msg: "Prechecks are Success"
