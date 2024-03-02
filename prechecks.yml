@@ -10,7 +10,7 @@
     - name: Check if Java is installed
       fail:
         msg: "Java is not installed"
-      when: "'java version' not in java_version_output.stderr"
+      when: "'openjdk version' not in java_version_output.stderr"
 
     - name: Check Wildfly process
       shell: ps aux | grep "wildfly"
