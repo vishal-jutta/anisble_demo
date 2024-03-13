@@ -1,0 +1,72 @@
+---
+- name: Install Wildfly Standalone on RHEL
+  hosts: all
+  become: true
+  vars:
+    wildfly_version: "29.0.0.Final"
+    wildfly_install_dir: "/opt/wildfly"
+  pre_tasks:
+    - name: create install directory {{ wildfly_install_dir }}
+      file:
+        path: "{{ wildfly_install_dir }}"
+        state: directory
+    - name: Download Wildfly Binary
+      get_url:
+        url: "https://github.com/wildfly/wildfly/releases/download/29.0.0.Final/wildfly-{{ wildfly_version }}.zip"
+        dest: "/tmp/wildfly-{{ wildfly_version }}.zip"
+
+  tasks: 
+    - name: Extract Wildfly BInary
+      ansible.builtin.unarchive:
+        src: "/tmp/wildfly-{{ wildfly_version }}.zip"
+        dest: "{{ wildfly_install_dir }}"
+        remote_src: yes
+        creates: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}"
+
+    - name: Create Wildfly Service File
+      copy:
+        content: |
+          [Unit]
+          Description=Wildfly Standalone Server
+          After=network.target
+          
+          [Service]
+          Type=simple
+          ExecStart={{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/bin/standalone.sh -c standalone.xml
+          ExecStop={{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/bin/jboss-cli.sh --connect command=:shutdown
+          User=root
+          Group=root
+          Restart=always
+          
+          [Install]
+          WantedBy=multi-user.target
+        dest: "/etc/systemd/system/wildfly.service"
+
+    - name: Reload systemd and Start Wildlfy Service
+      systemd:
+        name: wildfly
+        state: started
+        enabled: yes
+
+    - name: Open necessary ports in firewall
+      ansible.builtin.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        state: enabled
+      loop:
+        - 8080/tcp
+        - 9990/tcp
+
+    - name: Ensure SELinux allows Wildfly ports
+      ansible.builtin.seboolean:
+        name: httpd_can_network_connect
+        state: yes
+        persistent: yes
+  post_tasks:
+    - name: Create admin console user for Wildfly
+      command: "sh {{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/bin/add-user.sh admin admin"
+      
+    - name: Deploy sample Application on Wildfly admin console
+      get_url:
+        url: 'http://csci.viu.ca/~barskym/teaching/DM2012/labs/LAB6/Lab6A.war'
+        dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
