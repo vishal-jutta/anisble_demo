@@ -75,6 +75,10 @@
         src: "/tmp/SBI_POC-1.0.war"
         dest: "{{ wildfly_install_dir }}/wildfly-{{ wildfly_version }}/standalone/deployments/"
         remote_src: yes
+    - name: Remove war from tmp location
+      file:
+        path: "/tmp/SBI_POC-1.0.war"
+        state: absent
 
   handlers:
     - name: Reload firewall
