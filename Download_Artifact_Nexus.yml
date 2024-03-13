@@ -6,8 +6,8 @@
   vars:
     nexus_username: "admin"
     nexus_password: "admin"
-    #nexus_repository_url: "http://192.168.29.57:8081/repository/mavenRepo/"
-    nexus_repository_url: "http://192.168.128.1:8081/repository/mavenRepo/"
+    nexus_repository_url: "http://192.168.29.57:8081/repository/mavenRepo/"
+    #nexus_repository_url: "http://192.168.128.1:8081/repository/mavenRepo/"
     artifact_group_id: "com.boxfuse.samples"
     artifact_artifact_id: "SBI_POC"
     artifact_version: "1.0"
