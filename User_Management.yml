@@ -3,10 +3,10 @@
   hosts: all
   become: yes
   vars:
-    user_name: "vishal"
+    #user_name: "vishal"
     user_password: "{{ 'password123' | password_hash('sha512') }}"
-    user_state: "present"  # Use "present" to create and "absent" to delete
-    add_to_sudoers: true  # Set to true to add to sudoers, false to skip
+    #user_state: "present"  # Use "present" to create and "absent" to delete
+    #add_to_sudoers: true  # Set to true to add to sudoers, false to skip
 
   tasks:
     - name: Ensure the user is present or absent
