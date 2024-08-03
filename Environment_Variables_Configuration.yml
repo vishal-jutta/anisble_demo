@@ -1,0 +1,55 @@
+---
+- name: Configure environment variables on RHEL
+  hosts: all
+  become: yes
+  vars:
+    user_name: "vishal"
+    user_env_vars:
+      - name: PATH
+        value: "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/bin"
+      - name: JAVA_HOME
+        value: "/usr/lib/jvm/java-11-openjdk"
+    system_env_vars:
+      - name: LANG
+        value: "en_US.UTF-8"
+      - name: LC_ALL
+        value: "en_US.UTF-8"
+
+  tasks:
+    - name: Ensure the user exists
+      user:
+        name: "{{ user_name }}"
+        state: present
+
+    - name: Configure user environment variables in .bashrc
+      lineinfile:
+        path: "/home/{{ user_name }}/.bashrc"
+        state: present
+        create: yes
+        line: "export {{ item.name }}={{ item.value }}"
+      loop: "{{ user_env_vars }}"
+      become_user: "{{ user_name }}"
+
+    - name: Create script for user environment variables in .profile
+      copy:
+        content: |
+          {% for var in user_env_vars %}
+          export {{ var.name }}={{ var.value }}
+          {% endfor %}
+        dest: "/home/{{ user_name }}/.profile"
+        owner: "{{ user_name }}"
+        group: "{{ user_name }}"
+        mode: '0644'
+      when: user_env_vars | length > 0
+
+    - name: Configure system-wide environment variables
+      copy:
+        content: |
+          {% for var in system_env_vars %}
+          export {{ var.name }}={{ var.value }}
+          {% endfor %}
+        dest: "/etc/profile.d/custom_env.sh"
+        owner: root
+        group: root
+        mode: '0644'
+      when: system_env_vars | length > 0
