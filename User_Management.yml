@@ -23,7 +23,7 @@
         regexp: "^{{ user_name }} "
         line: "{{ user_name }} ALL=(ALL) NOPASSWD:ALL"
         validate: 'visudo -cf %s'
-      when: user_state == 'present' and add_to_sudoers == true
+      when: user_state == 'present' and add_to_sudoers
 
     - name: Remove sudo 
       lineinfile:
