@@ -1,6 +1,6 @@
 ---
 - name: Manage a specific user
-  hosts: finer7sawfly
+  hosts: all
   become: yes
   vars:
     user_name: "vishal"
