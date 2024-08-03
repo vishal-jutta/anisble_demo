@@ -1,0 +1,34 @@
+---
+- name: Manage a specific user
+  hosts: finer7sawfly
+  become: yes
+  vars:
+    user_name: "vishal"
+    user_password: "{{ 'password123' | password_hash('sha512') }}"
+    user_state: "present"  # Use "present" to create and "absent" to delete
+    add_to_sudoers: true  # Set to true to add to sudoers, false to skip
+
+  tasks:
+    - name: Ensure the user is present or absent
+      user:
+        name: "{{ user_name }}"
+        password: "{{ user_password }}"
+        state: "{{ user_state }}"
+      when: user_state == 'present' or user_state == 'absent'
+
+    - name: Add user to sudoers
+      lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: "^{{ user_name }} "
+        line: "{{ user_name }} ALL=(ALL) NOPASSWD:ALL"
+        validate: 'visudo -cf %s'
+      when: user_state == 'present' and add_to_sudoers
+
+    - name: Remove user from sudoers
+      lineinfile:
+        path: /etc/sudoers
+        state: absent
+        regexp: "^{{ user_name }} "
+        validate: 'visudo -cf %s'
+      when: user_state == 'absent' or not add_to_sudoers
