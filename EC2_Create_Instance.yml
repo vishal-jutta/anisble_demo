@@ -1,0 +1,22 @@
+---
+- name: Create an EC2 instance
+  hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: start an instance with a public IP address
+      amazon.aws.ec2_instance:
+        name: "SBI_Demo_Instance"
+        key_name: vj-aaponaws-aug2024
+        vpc_subnet_id: subnet-048b2268abfa580d7
+        instance_type: t2.micro
+        security_group: sg-0c6749691e58d7305
+        network:
+          assign_public_ip: true
+        image_id: ami-0583d8c7a9c35822c
+        tags:
+          Environment: Testing
+      register: ec2
+
+    - name: Print new instance ID
+      debug:
+        msg: "EC2 instance ID is {{ ec2.instance_ids[0] }}"

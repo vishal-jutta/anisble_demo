@@ -1,0 +1,10 @@
+---
+- name: Terminate an EC2 instance
+  hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: terminate
+      amazon.aws.ec2_instance:
+        state: absent
+        filters:
+          instance-state-name: running
