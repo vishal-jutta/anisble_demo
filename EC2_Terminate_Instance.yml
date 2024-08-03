@@ -1,6 +1,7 @@
 ---
 - name: Terminate an EC2 instance
   hosts: all
+  become: true
   gather_facts: False
   tasks:
     - name: terminate
