@@ -6,5 +6,6 @@
     - name: terminate
       amazon.aws.ec2_instance:
         state: absent
+        region: "us-east-1"
         filters:
           instance-state-name: running
