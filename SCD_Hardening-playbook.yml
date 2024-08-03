@@ -1,0 +1,113 @@
+---
+- name: RHEL Hardening Playbook
+  hosts: finer7sawfly
+  become: yes
+  vars:
+    banner_message: |
+      Un-authorized use of this system is prohibited. All activities are monitored and recorded.
+
+  tasks:
+    - name: Ensure firewalld is installed and enabled
+      yum:
+        name: firewalld
+        state: present
+
+    - name: Start and enable firewalld
+      service:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Set SELinux to enforcing mode
+      selinux:
+        policy: targeted
+        state: enforcing
+
+    - name: Ensure auditing is installed
+      yum:
+        name: audit
+        state: present
+
+    - name: Ensure auditd service is running and enabled
+      service:
+        name: auditd
+        state: started
+        enabled: yes
+
+    - name: Set password aging policies
+      lineinfile:
+        path: /etc/login.defs
+        state: present
+        regexp: '^{{ item.key }}'
+        line: '{{ item.key }} {{ item.value }}'
+      loop:
+        - { key: 'PASS_MAX_DAYS', value: '90' }
+        - { key: 'PASS_MIN_DAYS', value: '7' }
+        - { key: 'PASS_MIN_LEN', value: '14' }
+        - { key: 'PASS_WARN_AGE', value: '7' }
+
+    - name: Ensure password complexity requirements
+      lineinfile:
+        path: /etc/security/pwquality.conf
+        state: present
+        regexp: '^{{ item.key }}'
+        line: '{{ item.key }} = {{ item.value }}'
+      loop:
+        - { key: 'minlen', value: '14' }
+        - { key: 'dcredit', value: '-1' }
+        - { key: 'ucredit', value: '-1' }
+        - { key: 'ocredit', value: '-1' }
+        - { key: 'lcredit', value: '-1' }
+
+    - name: Disable root login over SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: '^PermitRootLogin'
+        line: 'PermitRootLogin no'
+      notify: restart sshd
+
+    - name: Set SSH idle timeout
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: '^ClientAliveInterval'
+        line: 'ClientAliveInterval 300'
+      notify: restart sshd
+
+    - name: Ensure GPG check is globally activated
+      lineinfile:
+        path: /etc/yum.conf
+        state: present
+        regexp: '^gpgcheck'
+        line: 'gpgcheck=1'
+
+    - name: Create system banner
+      copy:
+        content: "{{ banner_message }}"
+        dest: /etc/issue
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Ensure IPTables is installed
+      yum:
+        name: iptables-services
+        state: present
+
+    - name: Start and enable IPTables
+      service:
+        name: iptables
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: restart sshd
+      service:
+        name: sshd
+        state: restarted
+
+    - name: restart auditd
+      service:
+        name: auditd
+        state: restarted
