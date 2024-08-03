@@ -1,6 +1,7 @@
 ---
 - name: Create an EC2 instance
   hosts: localhost
+  become: true
   gather_facts: False
   tasks:
     - name: start an instance with a public IP address
