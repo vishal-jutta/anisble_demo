@@ -6,6 +6,7 @@
     - name: start an instance with a public IP address
       amazon.aws.ec2_instance:
         name: "SBI_Demo_Instance"
+        region: "us-east-1"
         key_name: vj-aaponaws-aug2024
         vpc_subnet_id: subnet-048b2268abfa580d7
         instance_type: t2.micro
