@@ -3,7 +3,7 @@
   hosts: all
   become: yes
   vars:
-    user_name: "vishal"
+    #user_name: "vishal"
     user_env_vars:
       - name: PATH
         value: "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/bin"
