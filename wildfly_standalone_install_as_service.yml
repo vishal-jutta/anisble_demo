@@ -53,6 +53,8 @@
         port: "{{ item }}"
         permanent: true
         state: enabled
+      vars:
+        ansible_python_interpreter: "/usr/bin/python3"
       loop:
         - 8080/tcp
         - 9990/tcp
