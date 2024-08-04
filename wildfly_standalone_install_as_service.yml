@@ -1,6 +1,6 @@
 ---
 - name: Install Wildfly Standalone on RHEL
-  hosts: ansible-1
+  hosts: all
   become: true
   vars:
     wildfly_version: "29.0.0.Final"
