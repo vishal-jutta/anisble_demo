@@ -1,6 +1,6 @@
 ---
 - name: Install Antivirus Agent on RHEL
-  hosts: cute8burro
+  hosts: all
   become: yes
   vars:
     antivirus_package: "clamav"
