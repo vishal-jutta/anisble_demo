@@ -49,7 +49,7 @@
         enabled: yes
 
     - name: Open necessary ports in firewall
-      ansible.posix.firewalld:
+      firewalld:
         port: "{{ item }}"
         permanent: true
         state: enabled
