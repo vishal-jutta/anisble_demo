@@ -1,6 +1,6 @@
 ---
 - name: RHEL Hardening Playbook
-  hosts: finer7sawfly
+  hosts: all
   become: yes
   vars:
     banner_message: |
