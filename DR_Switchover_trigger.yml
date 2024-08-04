@@ -4,6 +4,13 @@
   become: true
   tasks:
 
+    - name: Stop Wildlfy Service
+      systemd:
+        name: wildfly
+        state: stopped
+        daemon_reload: yes
+        enabled: yes
+    
     - name: Check Wildfly process
       shell: /opt/wildfly/wildfly-29.0.0.Final/bin/jboss-cli.sh -c command=':read-attribute(name=server-state)' | grep running
       register: wildfly_process
