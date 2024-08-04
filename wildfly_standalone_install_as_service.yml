@@ -49,12 +49,12 @@
         enabled: yes
 
     - name: Open necessary ports in firewall
-      firewalld:
+      ansible.posix.firewalld:
         port: "{{ item }}"
         permanent: true
         state: enabled
       vars:
-        ansible_python_interpreter: /usr/bin/python3
+        ansible_python_interpreter: "/usr/bin/python3"
       loop:
         - 8080/tcp
         - 9990/tcp
