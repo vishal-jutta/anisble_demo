@@ -20,10 +20,13 @@
         region: us-east-1
       register: subnet
 
-    - name: Create Security Group
-      amazon.aws.ec2_security_group:
-        name: sg_group
-        description: demo_seurity_group
+    - name: Create subnet 2
+      amazon.aws.ec2_vpc_subnet:
+        state: present
+        vpc_id: "{{ vpc.vpc.id }}"
+        cidr: 10.0.0.0/28
+        region: us-east-1
+      register: subnet
       
     - name: start an instance with a public IP address
       amazon.aws.ec2_instance:
