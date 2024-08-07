@@ -4,7 +4,7 @@
   become: true
   gather_facts: False
   tasks:
-    - name: create a VPC with dedicated tenancy and request an IPv6 CIDR
+    - name: create a VPC
       amazon.aws.ec2_vpc_net:
         name: Module_dev2
         cidr_block: 10.10.0.0/16
@@ -12,6 +12,13 @@
         region: us-east-1
         tenancy: dedicated
       register: vpc
+    - name: Create subnet
+      amazon.aws.ec2_vpc_subnet:
+        state: present
+        vpc_id: "{{ vpc.vpc.id }}"
+        cidr: 10.0.0.0/28
+        region: us-east-1
+      register: subnet
     - name: start an instance with a public IP address
       amazon.aws.ec2_instance:
         name: "SBI_Demo_Instance"
