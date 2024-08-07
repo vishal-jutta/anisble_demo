@@ -19,18 +19,10 @@
         cidr: 10.0.0.0/28
         region: us-east-1
       register: subnet
+      
     - name: Create a Security Group
       amazon.aws.ec2_security_group:
-        name: Security-Group-demo
-        description: sg with rule descriptions
-        vpc_id: "{{ vpc.vpc.id }}"
-        rules:
-          - proto: tcp
-            ports:
-              - 80
-            cidr_ip: 0.0.0.0/0
-            rule_desc: allow all on port 80
-      register: security_group
+        
     - name: start an instance with a public IP address
       amazon.aws.ec2_instance:
         name: "SBI_Demo_Instance"
