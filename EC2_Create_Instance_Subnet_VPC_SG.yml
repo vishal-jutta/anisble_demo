@@ -3,16 +3,6 @@
   hosts: all
   become: true
   gather_facts: False
-  vars:
-    region: ap-south-1
-    instance_type: t3.micro
-    ami: ami-0f9d9a251c1a44858
-    key_name: ansible-demo
-    vpc_name: ansible-vpc-test
-    cidr_block: "10.10.0.0/16"
-    cidr: "10.10.0.0/24"
-    #aws_access_key: <YOUR ACCESS KEY>
-    #aws_secret_key: <YOUR SECRET KEY>
   tasks:
     - name: Create a new VPC 
       amazon.aws.ec2_vpc_net:
