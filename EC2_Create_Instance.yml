@@ -24,6 +24,7 @@
       ec2_group:
         state: present
         name: demo-security-group
+        description: "demo-security-group"
         vpc_id: "{{ vpc.vpc.id }}"
         region: us-east-1
         rules:
