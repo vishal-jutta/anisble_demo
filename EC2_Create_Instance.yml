@@ -21,7 +21,7 @@
       register: subnet
 
     - name: Create subnet 2
-      amazon.aws.ec2_security_group_info:
+      ec2_group:
         state: present
         vpc_id: "{{ vpc.vpc.id }}"
         cidr: 10.0.0.0/28
