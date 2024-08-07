@@ -23,11 +23,7 @@
       amazon.aws.ec2_security_group:
         name: sg_group
         description: demo_seurity_group
-        vpc_id: "{{ vpc.vpc.id }}"
-        rule:
-          - proto: tcp
-            ports:
-              - 80
+      
     - name: start an instance with a public IP address
       amazon.aws.ec2_instance:
         name: "SBI_Demo_Instance"
