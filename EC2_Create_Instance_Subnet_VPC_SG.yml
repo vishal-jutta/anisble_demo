@@ -3,8 +3,18 @@
   hosts: all
   become: true
   gather_facts: False
+  vars:
+    region: ap-south-1
+    instance_type: t3.micro
+    ami: ami-0f9d9a251c1a44858
+    key_name: ansible-demo
+    vpc_name: ansible-vpc-test
+    cidr_block: "10.10.0.0/16"
+    cidr: "10.10.0.0/24"
+    #aws_access_key: <YOUR ACCESS KEY>
+    #aws_secret_key: <YOUR SECRET KEY>
   tasks:
-    - name: Create a new VPC 
+    - name: Create a new VPC 
       amazon.aws.ec2_vpc_net:
         name: "Ansible-Test"
         cidr_block: "{{ cidr_block }}"
@@ -12,44 +22,21 @@
         #aws_secret_key: "{{ aws_secret_key }}"
         region: "{{ region }}"
       register: vpc
+    - name: start an instance with a public IP address
+      amazon.aws.ec2_instance:
+        name: "SBI_Demo_Instance"
+        region: "us-east-1"
+        key_name: vj-aaponaws-aug2024
+        vpc_subnet_id: subnet-048b2268abfa580d7
+        instance_type: t2.micro
+        security_group: sg-0c6749691e58d7305
+        network:
+          assign_public_ip: true
+        image_id: ami-0583d8c7a9c35822c
+        tags:
+          Environment: Testing
+      register: ec2
 
-    - name: Create a new Subnet
-      amazon.aws.ec2_vpc_subnet:
-        #aws_access_key: "{{ aws_access_key }}"
-        #aws_secret_key: "{{ aws_secret_key }}"
-        cidr: "{{ cidr }}"
-        region: "{{ region }}"
-        vpc_id: "{{ vpc.vpc.id }}"
-      register: subnet
-      
-    - name: Create a Security Group  
-      amazon.aws.ec2_security_group:
-        name: "Ansible-Test-Security-Group"
-        description: "Ansible-Testing"
-        #aws_access_key: "{{ aws_access_key }}"
-        #aws_secret_key: "{{ aws_secret_key }}"
-        vpc_id: "{{ vpc.vpc.id }}"
-        region: "{{ region }}"
-        rules:
-          - proto: tcp
-            ports:
-            - 80
-            cidr_ip: 0.0.0.0/0
-            rule_desc: "allow all on port 80"
-      register: security_group
-   
-    - name: Launch an EC2 Instance
-      amazon.aws.ec2_instance:
-        name: "Test-Ansible"
-        key_name: "{{ key_name }}"
-        #aws_access_key: "{{ aws_access_key }}"
-        #aws_secret_key: "{{ aws_secret_key }}"
-        vpc_subnet_id: "{{ subnet.subnet.id }}"
-        instance_type: "{{ instance_type }}"
-        security_group: "{{ security_group.group_id  }}"
-        count: 1
-        wait: yes
-        aws_region: "ap-south-1"
-        network:
-          assign_public_ip: true
-        image_id: "{{ ami }}"
+    - name: Print new instance ID
+      debug:
+        msg: "EC2 instance ID is {{ ec2.instance_ids[0] }}"
