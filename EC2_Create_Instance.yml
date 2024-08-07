@@ -19,14 +19,27 @@
         cidr: 10.0.0.0/28
         region: us-east-1
       register: subnet
+    - name: Create a Security Group
+      amazon.aws.ec2_security_group:
+        name: security_group
+        description: sg with rule descriptions
+        vpc_id: "{{ vpc.vpc.id }}"
+        region: us-east-1
+        rules:
+          - proto: tcp
+            ports:
+             - 80
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all on port 80
+      register: security_group
     - name: start an instance with a public IP address
       amazon.aws.ec2_instance:
         name: "SBI_Demo_Instance"
         region: "us-east-1"
         key_name: vj-aaponaws-aug2024
-        vpc_subnet_id: subnet-0b83dbb79e38f5303
+        vpc_subnet_id: "{{ subnet.subnet.id }}" #subnet-0b83dbb79e38f5303
         instance_type: t2.micro
-        security_group: sg-01ef1792dd266b65a
+        security_group: "{{ security_group.group_id  }}" #sg-01ef1792dd266b65a
         network:
           assign_public_ip: true
         image_id: ami-0583d8c7a9c35822c
