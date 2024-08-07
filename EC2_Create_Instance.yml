@@ -19,6 +19,7 @@
         cidr: 10.0.0.0/28
         region: us-east-1
       register: subnet
+
     - name: Create Security Group
       amazon.aws.ec2_security_group:
         name: sg_group
