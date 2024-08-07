@@ -11,6 +11,7 @@
         ipv6_cidr: true
         region: us-east-1
         tenancy: dedicated
+      register: vpc
     - name: start an instance with a public IP address
       amazon.aws.ec2_instance:
         name: "SBI_Demo_Instance"
