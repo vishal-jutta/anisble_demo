@@ -9,7 +9,7 @@
         name: "SBI_Demo_Instance"
         region: "us-east-1"
         key_name: vj-aaponaws-aug2024
-        vpc_subnet_id: subnet-048b2268abfa580d7
+        vpc_subnet_id: subnet-0b83dbb79e38f5303
         instance_type: t2.micro
         security_group: sg-0c6749691e58d7305
         network:
