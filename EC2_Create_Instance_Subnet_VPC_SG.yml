@@ -1,4 +1,4 @@
---- # Creating an EC2 Instance 
+---
 - name: Creating an EC2 Instance with ansible cli
   hosts: all
   vars:
