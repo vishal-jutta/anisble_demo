@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: False
   vars:
-    region: ap-south-1
+    region: us-east-1
     instance_type: t3.micr
     ami: ami-0f9d9a251c1a44858
     key_name: ansible-demo
