@@ -44,7 +44,7 @@
         vpc_id: "{{ vpc.vpc.id }}"
         region: us-east-1
         rules:
-          - proto: 80
+          - proto: tcp
             ports:
               - 80
             cidr_ip: 0.0.0.0/0
@@ -60,9 +60,9 @@
         name: "SBI_Demo_Instance"
         region: "us-east-1"
         key_name: vj-aaponaws-aug2024
-        vpc_subnet_id: subnet-0922888462d1c8dd9
+        vpc_subnet_id: "{{ subnet.subnet.id }}"
         instance_type: t2.micro
-        security_group: sg-07c4befa1a0e1068c
+        security_group: "{{ security_group.group_id }}"
         network:
           assign_public_ip: true
         image_id: ami-0583d8c7a9c35822c
