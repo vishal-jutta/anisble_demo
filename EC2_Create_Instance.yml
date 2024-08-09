@@ -51,7 +51,11 @@
             cidr_ip: 0.0.0.0/0
             rule_desc: "allow all on port 80"
       register: security_group
-      
+
+    - name: Print Security Group ID
+      debug:
+        msg: "{{ security_group.group_id }}"
+        
     - name: start an instance with a public IP address
       amazon.aws.ec2_instance:
         name: "SBI_Demo_Instance"
