@@ -21,7 +21,9 @@
         cidr: 10.0.0.0/28
         region: us-east-1
       register: subnet
-
+    - name: Print Subnet ID
+      debug:
+        msg: "{{ subnet.subnet.id }}"
     - name: Create Security Group
       ec2_group:
         state: present
@@ -42,9 +44,9 @@
         name: "SBI_Demo_Instance"
         region: "us-east-1"
         key_name: vj-aaponaws-aug2024
-        vpc_subnet_id: subnet-0b83dbb79e38f5303
+        vpc_subnet_id: "{{ subnet.subnet.id }}" #subnet-0b83dbb79e38f5303
         instance_type: t2.micro
-        security_group: sg-01ef1792dd266b65a
+        security_group: "{{ security_group.group_id }}" #sg-01ef1792dd266b65a
         network:
           assign_public_ip: true
         image_id: ami-0583d8c7a9c35822c
