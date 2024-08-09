@@ -62,9 +62,9 @@
         name: "Vishal-Indigo-WS-Instance"
         region: "us-east-1"
         key_name: vj-aaponaws-aug2024
-        vpc_subnet_id: subnet-002d215659c7ff566
+        vpc_subnet_id: "{{ subnet.subnet.id }}"
         instance_type: t2.micro
-        security_group: sg-0ef548b45c978a88e
+        security_group: "{{ security_group.group_id }}"
         network:
           assign_public_ip: true
         image_id: ami-0583d8c7a9c35822c
