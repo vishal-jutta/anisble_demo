@@ -13,7 +13,7 @@
       
     - name: Print Key Pair Name
       debug:
-        msg: "{{ aws_ec2_key_pair }}"
+        msg: "{{ aws_ec2_key_pair.key.name }}"
         
     - name: create a VPC
       amazon.aws.ec2_vpc_net:
@@ -26,11 +26,12 @@
       
     - name: Create subnet
       amazon.aws.ec2_vpc_subnet:
-        name: vishal_indigo-ws-subnet
         state: present
         vpc_id: "{{ vpc.vpc.id }}"
         cidr: 10.0.0.0/28
         region: us-east-1
+        tags:
+          Name: vishal_indigo-ws-subnet
       register: subnet
       
     - name: Print Subnet ID
