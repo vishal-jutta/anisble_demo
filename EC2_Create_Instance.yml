@@ -13,7 +13,7 @@
       
     - name: Print Key Pair Name
       debug:
-        msg: "{{ aws_ec2_key_pair.name }}"
+        msg: "{{ aws_ec2_key_pair }}"
         
     - name: create a VPC
       amazon.aws.ec2_vpc_net:
