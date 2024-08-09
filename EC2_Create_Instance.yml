@@ -14,7 +14,7 @@
       
     - name: Print Subnet ID
       debug:
-        msg: "{{ aws_ec2_key_pair }}"
+        msg: "{{ aws_ec2_key_pair.name }}"
         
     - name: create a VPC
       amazon.aws.ec2_vpc_net:
