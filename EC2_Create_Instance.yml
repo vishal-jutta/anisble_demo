@@ -19,9 +19,9 @@
       amazon.aws.ec2_vpc_net:
         name: vishal_indigo-ws-vpc
         cidr_block: 10.0.0.0/24
-        ipv6_cidr: true
+        ipv6_cidr: false
         region: us-east-1
-        tenancy: dedicated
+        tenancy: default
       register: vpc
       
     - name: Create subnet
@@ -62,9 +62,9 @@
         name: "Vishal-Indigo-WS-Instance"
         region: "us-east-1"
         key_name: vj-aaponaws-aug2024
-        vpc_subnet_id: subnet-06cc8f4292e2c4bab
+        vpc_subnet_id: subnet-002d215659c7ff566
         instance_type: t2.micro
-        security_group: sg-0c335f5af049d07ad
+        security_group: sg-0ef548b45c978a88e
         network:
           assign_public_ip: true
         image_id: ami-0583d8c7a9c35822c
