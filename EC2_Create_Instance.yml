@@ -6,6 +6,16 @@
   vars:
     ansible_python_interpreter: /usr/bin/python3
   tasks:
+    - name: create a new EC2 key pair, returns generated private key
+      amazon.aws.ec2_key:
+        name: my_keypair
+      no_log: true
+      register: aws_ec2_key_pair
+      
+    - name: Print Subnet ID
+      debug:
+        msg: "{{ aws_ec2_key_pair }}"
+        
     - name: create a VPC
       amazon.aws.ec2_vpc_net:
         name: Module_dev2
@@ -14,6 +24,7 @@
         region: us-east-1
         tenancy: dedicated
       register: vpc
+      
     - name: Create subnet
       amazon.aws.ec2_vpc_subnet:
         state: present
@@ -21,9 +32,11 @@
         cidr: 10.0.0.0/28
         region: us-east-1
       register: subnet
+      
     - name: Print Subnet ID
       debug:
         msg: "{{ subnet.subnet.id }}"
+        
     - name: Create Security Group
       ec2_group:
         state: present
@@ -44,9 +57,9 @@
         name: "SBI_Demo_Instance"
         region: "us-east-1"
         key_name: vj-aaponaws-aug2024
-        vpc_subnet_id: "{{ subnet.subnet.id }}" #subnet-0b83dbb79e38f5303
+        vpc_subnet_id: subnet-04ea2ff21ab98ebeb #"{{ subnet.subnet.id }}" subnet-0b83dbb79e38f5303
         instance_type: t2.micro
-        security_group: "{{ security_group.group_id }}" #sg-01ef1792dd266b65a
+        security_group: sg-0934b0f4513ac959b #"{{ security_group.group_id }}" sg-01ef1792dd266b65a
         network:
           assign_public_ip: true
         image_id: ami-0583d8c7a9c35822c
