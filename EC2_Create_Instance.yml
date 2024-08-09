@@ -12,7 +12,7 @@
       no_log: true
       register: aws_ec2_key_pair
       
-    - name: Print Subnet ID
+    - name: Print Key Pair Name
       debug:
         msg: "{{ aws_ec2_key_pair.name }}"
         
