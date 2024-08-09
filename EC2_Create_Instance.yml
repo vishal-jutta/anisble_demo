@@ -3,6 +3,8 @@
   hosts: all
   become: true
   gather_facts: False
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
   tasks:
     - name: create a VPC
       amazon.aws.ec2_vpc_net:
