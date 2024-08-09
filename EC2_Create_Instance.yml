@@ -2,9 +2,9 @@
 - name: Create an EC2 instance
   hosts: all
   become: true
-  gather_facts: False
-  #vars:
-  #  ansible_python_interpreter: /usr/bin/python3
+  gather_facts: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
   tasks:
     - name: create a new EC2 key pair
       amazon.aws.ec2_key:
