@@ -6,10 +6,9 @@
   vars:
     ansible_python_interpreter: /usr/bin/python3
   tasks:
-    - name: create a new EC2 key pair, returns generated private key
+    - name: create a new EC2 key pair
       amazon.aws.ec2_key:
         name: my_keypair
-      no_log: true
       register: aws_ec2_key_pair
       
     - name: Print Key Pair Name
