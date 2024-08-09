@@ -4,7 +4,7 @@
   become: true
   vars:
     wildfly_version: "29.0.0.Final"
-    wildfly_install_dir: "/opt/wildfly"
+    wildfly_install_dir: "/opt/DR_Wildfly"
   pre_tasks:
     - name: create install directory {{ wildfly_install_dir }}
       file:

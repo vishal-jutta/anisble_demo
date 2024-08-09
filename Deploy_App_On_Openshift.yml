@@ -1,0 +1,76 @@
+
+---
+- name: Deploy sample application to OpenShift
+  hosts: all
+  tasks:
+    - name: Create a Openshift namespace
+      redhat.openshift.k8s:
+       name: bookinfo
+       api_version: v1
+       kind: Namespace
+       state: present
+      delegate_to: localhost
+
+    - name: Deploy Book info  application
+      redhat.openshift.k8s:
+       state: present   
+       definition:
+         apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+         kind: Deployment
+         metadata:
+           name: book-import
+           namespace: bookinfo   
+         spec:
+           selector:
+             matchLabels:
+               name: book-import
+           replicas: 2
+           template:
+             metadata:
+               labels:
+                 name: book-import
+             spec:
+               containers:
+               - name: book-import
+                 image: quay.io/jpacker/hugo-nginx:latest
+                 resources:
+                 ports:
+                 - containerPort: 8080
+                   name: http-server
+      delegate_to: localhost
+
+    - name: Create a Service for Book Info application
+      redhat.openshift.k8s:
+       state: present   
+       definition:
+         apiVersion: v1
+         kind: Service
+         metadata:
+           name: book-import
+           namespace: bookinfo
+           labels:
+             name: book-import
+         spec:
+           type: ClusterIP
+           ports:
+           - port: 80
+             targetPort: 8080
+           selector:
+             name: book-import
+      delegate_to: localhost
+
+    - name: Create route for Book Info application
+      redhat.openshift.k8s:
+       state: present   
+       definition:
+         apiVersion: route.openshift.io/v1
+         kind: Route
+         metadata:
+           name: book-import
+           namespace: bookinfo             
+         spec:
+           path: "/"
+           to:
+             kind: Service
+             name: book-import
+      delegate_to: localhost  
