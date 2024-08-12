@@ -6,7 +6,7 @@
   
   - Demo account 
       userid - indigo_ws
-      Password- @J****_2023@
+      Password- Indigo_WS@2024
 
   - Execute below cmd's on any one rhel 8 host
       - subscription-manager register
