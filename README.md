@@ -5,8 +5,8 @@
       https://www.redhat.com/ > register new account > verify email
   
   - Demo account 
-      userid - indigo_ws
-      Password- Indigo_WS@2024
+      - userid - indigo_ws
+      - Password- Indigo_WS@2024
 
   - Execute below cmd's on any one rhel 8 host
       - subscription-manager register
