@@ -1,6 +1,6 @@
 ---
 - name: Install JBoss on RHEL
-  hosts: jboss_servers
+  hosts: all
   become: yes
 
   vars:
