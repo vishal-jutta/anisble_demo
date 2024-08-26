@@ -1,0 +1,91 @@
+---
+- name: Install JBoss on RHEL
+  hosts: all
+  become: yes
+
+  vars:
+    jboss_user: jboss
+    jboss_group: jboss
+    jboss_home: /opt/jboss
+    jboss_download_url: "https://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip"  # Replace with your desired JBoss version URL
+    jboss_install_dir: /opt/jboss/jboss-as-7.1.1.Final
+
+  tasks:
+    - name: Install required packages
+      yum:
+        name: 
+          - java-1.8.0-openjdk-devel
+          - unzip
+        state: present
+
+    - name: Create JBoss group
+      group:
+        name: "{{ jboss_group }}"
+        state: present
+
+    - name: Create JBoss user
+      user:
+        name: "{{ jboss_user }}"
+        group: "{{ jboss_group }}"
+        create_home: no
+        home: "{{ jboss_home }}"
+        shell: /bin/bash
+
+    - name: Create JBoss home directory
+      file:
+        path: "{{ jboss_home }}"
+        state: directory
+        owner: "{{ jboss_user }}"
+        group: "{{ jboss_group }}"
+        mode: '0755'
+
+    - name: Download JBoss
+      get_url:
+        url: "{{ jboss_download_url }}"
+        dest: "/tmp/jboss-as.zip"
+
+    - name: Extract JBoss
+      unarchive:
+        src: "/tmp/jboss-as.zip"
+        dest: "{{ jboss_home }}"
+        remote_src: yes
+        creates: "{{ jboss_install_dir }}"
+
+    - name: Set ownership for JBoss directory
+      file:
+        path: "{{ jboss_install_dir }}"
+        state: directory
+        owner: "{{ jboss_user }}"
+        group: "{{ jboss_group }}"
+        recurse: yes
+
+    - name: Set up JBoss systemd service
+      copy:
+        content: |
+          [Unit]
+          Description=JBoss Application Server
+          After=network.target
+
+          [Service]
+          User={{ jboss_user }}
+          Group={{ jboss_group }}
+          ExecStart={{ jboss_install_dir }}/bin/standalone.sh -b 0.0.0.0
+          ExecReload=/bin/kill -HUP $MAINPID
+          LimitNOFILE=102642
+
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/jboss.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Reload systemd daemon
+      systemd:
+        daemon_reload: yes
+
+    - name: Enable and start JBoss service
+      systemd:
+        name: jboss
+        enabled: yes
+        state: started
