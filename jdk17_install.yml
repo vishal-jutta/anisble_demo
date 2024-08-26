@@ -38,9 +38,5 @@
         priority: 2
       when: "'javac 17' not in java_version_output.stdout"
 
-    - name: Verify default Java version
-      command: java -version
-      register: java_final_version
-
     - debug:
         msg: "Java version is now set to: {{ java_final_version.stdout }}"
