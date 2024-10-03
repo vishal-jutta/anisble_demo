@@ -1,0 +1,30 @@
+---
+- name: Check if swap is properly configured
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Get total memory in MB
+      set_fact:
+        total_mem_mb: "{{ ansible_memtotal_mb }}"
+    
+    - name: Calculate recommended swap size
+      set_fact:
+        recommended_swap_mb: "{{ (total_mem_mb * 2) if total_mem_mb <= 2048 else (total_mem_mb + 2048) }}"
+
+    - name: Get current swap size
+      command: "free -m | grep Swap"
+      register: swap_size_output
+
+    - name: Parse current swap size
+      set_fact:
+        current_swap_mb: "{{ swap_size_output.stdout.split()[1] }}"
+
+    - name: Compare current swap with recommended swap
+      debug:
+        msg: "Swap is properly configured: {{ current_swap_mb }} MB."
+      when: current_swap_mb | int >= recommended_swap_mb | int
+
+    - name: Report when swap is under-configured
+      debug:
+        msg: "Warning: Swap is under-configured. Current swap: {{ current_swap_mb }} MB, Recommended: {{ recommended_swap_mb }} MB."
+      when: current_swap_mb | int < recommended_swap_mb | int
