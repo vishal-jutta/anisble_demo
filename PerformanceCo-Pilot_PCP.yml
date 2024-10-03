@@ -1,0 +1,73 @@
+---
+- name: Install and configure Performance Co-Pilot (PCP) on all servers
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    # Task 1: Install Performance Co-Pilot (PCP) packages
+    - name: Install PCP packages (RHEL/CentOS based)
+      package:
+        name:
+          - pcp
+          - pcp-manager
+          - pcp-gui
+          - pcp-webjs
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Install PCP packages (Debian/Ubuntu based)
+      package:
+        name:
+          - pcp
+          - pcp-manager
+          - pcp-webapp
+        state: present
+      when: ansible_os_family == "Debian"
+
+    # Task 2: Ensure PCP service is enabled and running
+    - name: Enable and start PCP service
+      systemd:
+        name: pmlogger
+        state: started
+        enabled: yes
+
+    - name: Enable and start pmcd service
+      systemd:
+        name: pmcd
+        state: started
+        enabled: yes
+
+    - name: Enable and start pmlogger service
+      systemd:
+        name: pmlogger
+        state: started
+        enabled: yes
+
+    # Task 3: Ensure PCP's web UI service is running (optional)
+    - name: Enable and start pmwebd (PCP Web UI service)
+      systemd:
+        name: pmwebd
+        state: started
+        enabled: yes
+
+    # Task 4: Configure logging retention for PCP
+    - name: Configure PCP logging retention in pmlogger
+      lineinfile:
+        path: /etc/pcp/pmlogger/control.d/local
+        regexp: '^# primary logger'
+        line: 'primary logger on every : pmlogger -r -T24h10m -c config.default'
+        state: present
+
+    # Task 5: Reload and restart PCP services to apply configuration
+    - name: Reload systemd and restart PCP services
+      systemd:
+        name: pmlogger
+        state: restarted
+      notify: Restart PCP services
+
+  handlers:
+    - name: Restart PCP services
+      systemd:
+        name: pmcd
+        state: restarted
