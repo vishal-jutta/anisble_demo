@@ -6,7 +6,7 @@
 
   tasks:
     # Task 1: Install Performance Co-Pilot (PCP) packages
-    - name: Install PCP packages (RHEL/CentOS based)
+    - name: Install PCP packages (RHEL based)
       package:
         name:
           - pcp
@@ -15,15 +15,6 @@
           - pcp-webjs
         state: present
       when: ansible_os_family == "RedHat"
-
-    - name: Install PCP packages (Debian/Ubuntu based)
-      package:
-        name:
-          - pcp
-          - pcp-manager
-          - pcp-webapp
-        state: present
-      when: ansible_os_family == "Debian"
 
     # Task 2: Ensure PCP service is enabled and running
     - name: Enable and start PCP service
