@@ -48,45 +48,45 @@
       when: crash_dir.rc == 0
 
     # Task 3: Check for proper sysctl parameters in /etc/sysctl.conf
-    - name: List required sysctl parameters
-      set_fact:
-        required_sysctl_params:
-          - net.ipv4.ip_forward
-          - vm.swappiness
-          - fs.file-max
-          - kernel.sysrq
-          - net.ipv6.conf.all.disable_ipv6
+    # - name: List required sysctl parameters
+    #   set_fact:
+    #     required_sysctl_params:
+    #       - net.ipv4.ip_forward
+    #       - vm.swappiness
+    #       - fs.file-max
+    #       - kernel.sysrq
+    #       - net.ipv6.conf.all.disable_ipv6
 
-    - name: Check if all required sysctl parameters are configured
-      shell: "grep -E '{{ item }}' /etc/sysctl.conf"
-      loop: "{{ required_sysctl_params }}"
-      register: sysctl_config_check
-      ignore_errors: yes
+    # - name: Check if all required sysctl parameters are configured
+    #   shell: "grep -E '{{ item }}' /etc/sysctl.conf"
+    #   loop: "{{ required_sysctl_params }}"
+    #   register: sysctl_config_check
+    #   ignore_errors: yes
 
-    - name: Report missing sysctl parameters
-      debug:
-        msg: "Missing sysctl parameter: {{ item.item }}"
-      when: item.rc != 0
-      loop: "{{ sysctl_config_check.results }}"
+    # - name: Report missing sysctl parameters
+    #   debug:
+    #     msg: "Missing sysctl parameter: {{ item.item }}"
+    #   when: item.rc != 0
+    #   loop: "{{ sysctl_config_check.results }}"
 
-    # Task 4: Add missing sysctl parameters if required
-    - name: Add missing sysctl parameters to /etc/sysctl.conf
-      lineinfile:
-        path: /etc/sysctl.conf
-        regexp: "{{ item }}"
-        line: "{{ item }} = 1"
-        state: present
-      loop: "{{ required_sysctl_params }}"
-      when: item.rc != 0
-      loop_control:
-        loop_var: item
+    # # Task 4: Add missing sysctl parameters if required
+    # - name: Add missing sysctl parameters to /etc/sysctl.conf
+    #   lineinfile:
+    #     path: /etc/sysctl.conf
+    #     regexp: "{{ item }}"
+    #     line: "{{ item }} = 1"
+    #     state: present
+    #   loop: "{{ required_sysctl_params }}"
+    #   when: item.rc != 0
+    #   loop_control:
+    #     loop_var: item
 
-    # Task 5: Apply sysctl settings
-    - name: Apply sysctl settings
-      command: sysctl -p
-      register: sysctl_apply
+    # # Task 5: Apply sysctl settings
+    # - name: Apply sysctl settings
+    #   command: sysctl -p
+    #   register: sysctl_apply
 
-    - name: Report sysctl status
-      debug:
-        msg: "Sysctl parameters applied successfully."
-      when: sysctl_apply.rc == 0
+    # - name: Report sysctl status
+    #   debug:
+    #     msg: "Sysctl parameters applied successfully."
+    #   when: sysctl_apply.rc == 0
