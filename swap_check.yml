@@ -15,6 +15,10 @@
       shell: swapon -s
       register: swap_size_output
 
+    - name: Display Current Swap Size
+      debug:
+        msg: "Swap current size is: {{ swap_size_output }} MB."
+
     - name: Parse current swap size
       set_fact:
         current_swap_mb: "{{ swap_size_output.stdout.split()[1] }}"
