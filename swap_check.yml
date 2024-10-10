@@ -12,12 +12,12 @@
         recommended_swap_mb: "{{ (total_mem_mb * 2) if total_mem_mb <= 2048 else (total_mem_mb + 2048) }}"
 
     - name: Get current swap size
-      shell: swapon -s
+      shell: free -m | grep Swap
       register: swap_size_output
 
     - name: Display Current Swap Size
       debug:
-        msg: "Swap current size is: {{ swap_size_output }} MB."
+        msg: "Current Swap size is: {{ swap_size_output }} MB."
 
     - name: Parse current swap size
       set_fact:
