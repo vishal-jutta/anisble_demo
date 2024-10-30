@@ -1,7 +1,7 @@
 ---
 - name: Check if swap is properly configured
   hosts: all
-  gather_facts: yes
+  gather_facts: no
   tasks:
     - name: Get total memory in MB
       set_fact:
