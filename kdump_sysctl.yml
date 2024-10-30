@@ -39,13 +39,13 @@
         msg: "Crash dump directory /var/crash is not mounted or not present in /etc/fstab."
       when: crash_dir.rc != 0
 
-    - name: Ensure crash dump directory is mounted
-      mount:
-        path: /var/crash
-        src: "{{ crash_dir.stdout.split()[0] if crash_dir.rc == 0 else '/dev/mapper/vg-root' }}" # Modify according to your system's logical volume
-        fstype: xfs
-        state: mounted
-      when: crash_dir.rc == 0
+   # - name: Ensure crash dump directory is mounted
+    #  mount:
+     #   path: /var/crash
+      #  src: "{{ crash_dir.stdout.split()[0] if crash_dir.rc == 0 else '/dev/mapper/vg-root' }}" # Modify according to your system's logical volume
+       # fstype: xfs
+        #state: mounted
+     # when: crash_dir.rc == 0
 
     # Task 3: Check for proper sysctl parameters in /etc/sysctl.conf
     # - name: List required sysctl parameters
