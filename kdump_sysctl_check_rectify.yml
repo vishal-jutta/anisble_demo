@@ -1,0 +1,92 @@
+---
+- name: Check kdump and sysctl configuration on all servers
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    # Task 1: Check if kdump service is installed
+    - name: Check if kdump service is installed
+      command: "systemctl status kdump"
+      register: kdump_service
+      ignore_errors: yes
+
+    - name: Report if kdump is not installed
+      debug:
+        msg: "Kdump service is not installed on this server."
+      when: kdump_service.rc != 0
+
+    - name: Check if kdump service is enabled and running
+      systemd:
+        name: kdump
+        state: started
+        enabled: yes
+      register: kdump_status
+      when: kdump_service.rc == 0
+
+    - name: Report kdump service status
+      debug:
+        msg: "Kdump is {{ 'running and enabled' if kdump_status.changed == false else 'started and enabled now' }}."
+
+    # Task 2: Check if the crash dump directory is properly mounted
+    - name: Check if crash dump directory is properly mounted
+      command: "grep '/var/crash' /etc/fstab"
+      register: crash_dir
+      ignore_errors: yes
+
+    - name: Report if crash dump directory is missing from /etc/fstab
+      debug:
+        msg: "Crash dump directory /var/crash is not mounted or not present in /etc/fstab."
+      when: crash_dir.rc != 0
+
+    - name: Ensure crash dump directory is mounted
+      mount:
+        path: /var/crash
+        src: "{{ crash_dir.stdout.split()[0] if crash_dir.rc == 0 else '/dev/mapper/vg-root' }}" # Modify according to your system's logical volume
+        fstype: xfs
+        state: mounted
+      when: crash_dir.rc == 0
+
+    # Task 3: Check for proper sysctl parameters in /etc/sysctl.conf
+    - name: List required sysctl parameters
+      set_fact:
+        required_sysctl_params:
+          - net.ipv4.ip_forward
+          - vm.swappiness
+          - fs.file-max
+          - kernel.sysrq
+          - net.ipv6.conf.all.disable_ipv6
+
+    - name: Check if all required sysctl parameters are configured
+      shell: "grep -E '{{ item }}' /etc/sysctl.conf"
+      loop: "{{ required_sysctl_params }}"
+      register: sysctl_config_check
+      ignore_errors: yes
+
+    - name: Report missing sysctl parameters
+      debug:
+        msg: "Missing sysctl parameter: {{ item.item }}"
+      when: item.rc != 0
+      loop: "{{ sysctl_config_check.results }}"
+
+    # Task 4: Add missing sysctl parameters if required
+    - name: Add missing sysctl parameters to /etc/sysctl.conf
+      lineinfile:
+        path: /etc/sysctl.conf
+        regexp: "{{ item }}"
+        line: "{{ item }} = 1"
+        state: present
+      loop: "{{ required_sysctl_params }}"
+      when: item.rc != 0
+      loop_control:
+        loop_var: item
+
+    # Task 5: Apply sysctl settings
+    - name: Apply sysctl settings
+      command: sysctl -p
+      register: sysctl_apply
+
+    - name: Report sysctl status
+      debug:
+        msg: "Sysctl parameters applied successfully."
+      when: sysctl_apply.rc == 0
