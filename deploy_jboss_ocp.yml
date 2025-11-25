@@ -1,0 +1,127 @@
+---
+- name: Deploy JBoss EAP on OpenShift
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    namespace: jboss-eap
+    app_name: jboss-eap
+    jboss_image: "registry.redhat.io/jboss-eap-7/eap74-openjdk11-openshift-rhel8:latest"
+
+    # Optional: If pulling from registry.redhat.io, ServiceAccount must have the registry credentials
+    pull_secret_name: "redhat-registry-secret"
+
+  tasks:
+
+    # --------------------------------------------
+    # Ensure Namespace exists
+    # --------------------------------------------
+    - name: Create Namespace
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: "{{ namespace }}"
+        state: present
+
+    # --------------------------------------------
+    # LINK SECRET (only required if using registry.redhat.io)
+    # --------------------------------------------
+    - name: Link image pull secret to default SA
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ namespace }}"
+        definition:
+          apiVersion: v1
+          kind: ServiceAccount
+          metadata:
+            name: default
+          imagePullSecrets:
+            - name: "{{ pull_secret_name }}"
+
+    # --------------------------------------------
+    # Optional: ConfigMap for standalone.conf or custom settings
+    # --------------------------------------------
+    - name: Create JBoss config (optional)
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ namespace }}"
+        definition:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: jboss-config
+          data:
+            # Example: enable DEBUG mode
+            JAVA_OPTS_APPEND: "-Djboss.bind.address.management=0.0.0.0"
+
+    # --------------------------------------------
+    # Deployment
+    # --------------------------------------------
+    - name: Deploy JBoss EAP
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ namespace }}"
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: "{{ app_name }}"
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: "{{ app_name }}"
+            template:
+              metadata:
+                labels:
+                  app: "{{ app_name }}"
+              spec:
+                serviceAccountName: default
+                containers:
+                  - name: jboss-eap
+                    image: "{{ jboss_image }}"
+                    ports:
+                      - containerPort: 8080
+                      - containerPort: 9990   # management console
+                    envFrom:
+                      - configMapRef:
+                          name: jboss-config
+
+    # --------------------------------------------
+    # Service
+    # --------------------------------------------
+    - name: Create Service for JBoss
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ namespace }}"
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: "{{ app_name }}"
+          spec:
+            selector:
+              app: "{{ app_name }}"
+            ports:
+              - name: http
+                port: 8080
+                targetPort: 8080
+
+    # --------------------------------------------
+    # Route (public access)
+    # --------------------------------------------
+    - name: Expose JBoss through Route
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ namespace }}"
+        definition:
+          apiVersion: route.openshift.io/v1
+          kind: Route
+          metadata:
+            name: "{{ app_name }}"
+          spec:
+            to:
+              kind: Service
+              name: "{{ app_name }}"
+            port:
+              targetPort: http
